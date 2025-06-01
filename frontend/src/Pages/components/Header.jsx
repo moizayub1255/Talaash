@@ -1,5 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignInButton,
+} from "@clerk/clerk-react";
 
 const Header = () => {
   return (
@@ -48,6 +54,20 @@ const Header = () => {
               <Link className="nav-link" to="/lost-and-found">
                 Lost and Found
               </Link>
+            </li>
+            <li className="nav-item d-flex align-items-center gap-2">
+              <SignedOut>
+                <SignInButton>
+                  <button className="btn btn-outline-success btn-sm">
+                    Sign In
+                  </button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <div className="d-flex align-items-center">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
+              </SignedIn>
             </li>
           </ul>
         </div>
