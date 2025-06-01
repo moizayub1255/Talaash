@@ -12,7 +12,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid d-flex justify-content-between">
         <Link className="navbar-brand" to="/">
-          DBMS
+          Talaash
         </Link>
         <button
           className="navbar-toggler"

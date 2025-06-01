@@ -6,7 +6,7 @@ import { httpAction } from "./_generated/server";
 const http = httpRouter();
 
 http.route({
-  path: "/clerk-webhook",
+  path: "/clerk_webhook", // ✅ use underscore instead of dash for Convex compatibility
   method: "POST",
   handler: httpAction(async (ctx, request) => {
     const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;

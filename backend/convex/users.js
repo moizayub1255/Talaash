@@ -14,9 +14,11 @@ export const syncUser = mutation({
       .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
       .first();
 
-    if (existingUser) return;
+    if (existingUser) {
+      return;
+    }
 
-    return await ctx.db.insert("users", args);
+    return ctx.db.insert("users", args);
   },
 });
 
@@ -33,8 +35,10 @@ export const updateUser = mutation({
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
       .first();
 
-    if (!existingUser) return;
+    if (!existingUser) {
+      return;
+    }
 
-    return await ctx.db.patch(existingUser._id, args);
+    return ctx.db.patch(existingUser._id, args);
   },
 });

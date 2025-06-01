@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="row text-md-start">
         {/* Left Section */}
         <div className="col-12 col-md-4 mb-4">
-          <img src="/" alt="DBMS" className="img-fluid mb-2" />
+          <img src="/" alt="Talaash" className="img-fluid mb-2" />
           <p>
             We are a team of talented workers. We build modern, responsive websites and help you grow online with a strong presence.
           </p>
@@ -33,7 +33,7 @@ const Footer = () => {
           <p><strong>Address:</strong> Faisalabad</p>
           <p><strong>Email:</strong> moizayub401@gmail.com</p>
           <p><strong>Phone:</strong> +92 366190190</p>
-          {/* <p><strong>Follow us:</strong> Add icons if needed</p> */}
+          {/* <p><strong>Follow us:</strong> </p> */}
         </div>
       </div>
     </div>
