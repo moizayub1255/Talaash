@@ -9,7 +9,10 @@ export const createJob = async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
+  console.log("REQ.BODY:", req.body);
 };
+
+
 
 // Get All Jobs
 export const getJobs = async (req, res) => {

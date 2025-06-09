@@ -4,10 +4,13 @@ import cors from "cors"
 import morgan from "morgan"
 import connectDB from "./config/db.js"
 import jobRoutes from "./routes/jobRoutes.js";
+import { clerkClient } from '@clerk/clerk-sdk-node';
 
 // Load environment variables and connect to the database
 dotenv.config();
 connectDB();
+
+const CLERK_API_KEY = process.env.CLERK_API_KEY;
 
 // Initialize Express application
 const app = express()
