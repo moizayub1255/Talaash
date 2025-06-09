@@ -8,6 +8,8 @@ import Scholarship from "./Pages/Scholarship";
 import LostandFound from "./Pages/LostandFound";
 import Jobdetails from "./Pages/Jobdetails";
 import ScrollToTop from "./Pages/components/ScrollToTop";
+import Register from "./Pages/Register";
+import Login from "./Pages/Login";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/scholarship" element={<Scholarship />} />
         <Route path="/lost-and-found" element={<LostandFound />} />
         <Route path="/job-details" element={<Jobdetails />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );
