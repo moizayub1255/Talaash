@@ -25,12 +25,7 @@ const Login = () => {
         // Store token in localStorage
         localStorage.setItem("token", response.data.token);
 
-        // Check if user is admin
-        if (response.data.user.role === "admin") {
-          navigate("/admin/dashboard"); // Redirect to admin dashboard if admin
-        } else {
-          setError("You do not have access to the admin panel.");
-        }
+      
       } else {
         setError(response.data.message); // Show error message
       }

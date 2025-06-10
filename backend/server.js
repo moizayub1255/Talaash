@@ -1,45 +1,81 @@
+// API DOcumenATion
+import swaggerUi from "swagger-ui-express";
+import swaggerDoc from "swagger-jsdoc";
+// packages imports
 import express from "express";
+import "express-async-errors";
 import dotenv from "dotenv";
+import colors from "colors";
 import cors from "cors";
 import morgan from "morgan";
+//securty packges
+import helmet from "helmet";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
+// files imports
 import connectDB from "./config/db.js";
-import jobRoutes from "./routes/jobRoutes.js";
+// routes import
+import testRoutes from "./routes/testRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import errroMiddelware from "./middelwares/errroMiddleware.js";
+import jobsRoutes from "./routes/jobsRoute.js";
 import userRoutes from "./routes/userRoutes.js";
 
-// Load environment variables and connect to the database
+//Dot ENV config
 dotenv.config();
+
+// mongodb connection
 connectDB();
 
-const CLERK_API_KEY = process.env.CLERK_API_KEY;
+// Swagger api config
+// swagger api options
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Job Portal Application",
+      description: "Node Expressjs Job Portal Application",
+    },
+    servers: [
+      {
+        url: "http://localhost:8080",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
 
-// Initialize Express application
+const spec = swaggerDoc(options);
+
+//rest object
 const app = express();
 
-// Middleware setup
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
-  })
-);
-
+//middelwares
+app.use(helmet(``));
+app.use(xss());
+app.use(mongoSanitize());
 app.use(express.json());
+app.use(cors());
 app.use(morgan("dev"));
 
-// Define routes
-app.use("/api/v1/auth", userRoutes);
-app.use("/api", jobRoutes);
+//routes
+app.use("/api/v1/test", testRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/job", jobsRoutes);
 
-// Define a simple route
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
+//homeroute root
+app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(spec));
 
-// Set the port from environment variables or default to 8080
+//validation middelware
+app.use(errroMiddelware);
+
+//port
 const PORT = process.env.PORT || 8080;
-
-// Start the server
+//listen
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(
+    `Node Server Running on port no ${PORT}`
+      .bgCyan.white
+  );
 });

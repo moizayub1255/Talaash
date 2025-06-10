@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
-
 import { useNavigate } from "react-router-dom";
 
 
@@ -12,7 +11,6 @@ const Register = () => {
     password: "",
     phone: "",
     answer: "",
-    role: "user", // Default role can be set to 'user'
   });
 
   const [error, setError] = useState(null);
@@ -31,10 +29,10 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const { name, email, password, phone, answer, role } = formData;
+      const { name, email, password, phone, answer } = formData;
 
       // Check if all required fields are filled
-      if (!name || !email || !password || !phone || !answer || !role) {
+      if (!name || !email || !password || !phone || !answer) {
         setError("All fields are required.");
         setLoading(false);
         return;
@@ -124,17 +122,7 @@ const Register = () => {
                 />
               </div>
 
-              <div className="mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="role"
-                  placeholder="Enter Role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  disabled
-                />
-              </div>
+              
 
               {error && <div className="text-danger mb-3">{error}</div>}
 

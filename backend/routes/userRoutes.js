@@ -1,20 +1,14 @@
-import express from 'express';
-import {
-  registerController,
-  loginController,
-  forgotPasswordController,
-} from '../controllers/userController.js'; 
+import express from "express";
+import { updateUserController } from "../controllers/userController.js";
+import userAuth from "../middelwares/authMiddleware.js";
 
+//router object
 const router = express.Router();
 
-//routing
-//REGISTER || METHOD POST
-router.post("/register", registerController);
+//routes
+// GET USERS || GET
 
-//LOGIN || POST
-router.post("/login", loginController);
-
-//Forgot Password || POST
-router.post("/forgot-password", forgotPasswordController);
+// UPDATE USER || PUT
+router.put("/update-user", userAuth, updateUserController);
 
 export default router;
