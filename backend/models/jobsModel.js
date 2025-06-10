@@ -23,7 +23,7 @@ const jobSchema = new mongoose.Schema(
     },
     workLocation: {
       type: String,
-      default: "Mumbai",
+      default: "Lahore",
       required: [true, "Work location is required"],
     },
     createdBy: {
