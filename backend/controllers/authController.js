@@ -20,8 +20,8 @@ export const registerController = async (req, res, next) => {
   //token
   const token = user.createJWT();
   res.status(201).send({
-    sucess: true,
-    message: "User Created Successfully",
+    success: true,
+    message: "Registered Successfully",
     user: {
       name: user.name,
       lastName: user.lastName,
@@ -52,7 +52,7 @@ export const loginController = async (req, res, next) => {
   const token = user.createJWT();
   res.status(200).json({
     success: true,
-    message: "Login SUccessfully",
+    message: "Login Successfully",
     user,
     token,
   });
