@@ -1,7 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/auth.jsx";
 
 const Header = () => {
+
+    const [auth, setAuth] = useAuth();
+
+  const handleLogout = () => {
+    setAuth({
+      ...auth,
+      user: null,
+      token: "",
+    });
+    localStorage.removeItem("auth");
+    toast.success("Logout Successfully");
+  };
+
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid d-flex justify-content-between">
@@ -49,6 +64,56 @@ const Header = () => {
                 Lost and Found
               </Link>
             </li>
+            
+            
+            {!auth?.user ? (
+                <>
+                  <li className="nav-item">
+                    <Link to="/register" className="nav-link">
+                      Register
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/login" className="nav-link">
+                      Login
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item dropdown">
+                    <Link
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                    >
+                      {auth?.user?.name}
+                    </Link>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <Link
+                          to={`/dashboard/${
+                            auth?.user?.role === 1 ? "admin" : "user"
+                          }`}
+                          className="dropdown-item"
+                        >
+                          Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          onClick={handleLogout}
+                          to="/login"
+                          className="dropdown-item"
+                        >
+                          Logout
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                </>
+              )}
             
           </ul>
         </div>

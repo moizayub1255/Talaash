@@ -2,36 +2,43 @@ import React, { useState } from "react";
 import Headandfoot from "./components/Headandfoot";
 // import "../Styles/Login.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Add axios import
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../context/auth.jsx";
 
 const Login = () => {
-  const navigate = useNavigate();
-
-  // State variables for email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // To store error messages
+  const navigate = useNavigate();
+  const [auth, setAuth] = useAuth();
 
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent form default submission
+  // form function
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/login`, // Corrected endpoint
-        { email, password }
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/login`,
+        {
+          email,
+          password,
+        }
       );
-
-      // If login successful
-      if (response.data.success) {
-        // Store token in localStorage
-        localStorage.setItem("token", response.data.token);
-
-      
+      if (res && res.data.success) {
+        toast.success(res.data && res.data.message);
+        setAuth({
+          ...auth,
+          user: res.data.user,
+          token: res.data.token,
+        });
+        localStorage.setItem("auth", JSON.stringify(res.data));
+        navigate(location.state || "/");
       } else {
-        setError(response.data.message); // Show error message
+        toast.error(res.data.message);
       }
     } catch (error) {
-      setError("An error occurred while logging in.");
-      console.error(error);
+      console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -41,9 +48,8 @@ const Login = () => {
         <div className="register-container">
           <div className="register-form">
             <h3 className="text-center mb-4">Login</h3>
-            {error && <div className="alert alert-danger">{error}</div>}{" "}
             {/* Display error message */}
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <input
                   type="email"
@@ -51,7 +57,7 @@ const Login = () => {
                   placeholder="Enter Email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)} // Update email state
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
@@ -62,7 +68,7 @@ const Login = () => {
                   placeholder="Enter Password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)} // Update password state
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 

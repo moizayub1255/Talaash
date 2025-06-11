@@ -2,56 +2,52 @@ import React, { useState } from "react";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-    answer: "",
-  });
-
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [lastName, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [location, setLocation] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
+  // form function
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
     try {
-      const { name, email, password, phone, answer } = formData;
-
-      // Check if all required fields are filled
-      if (!name || !email || !password || !phone || !answer) {
-        setError("All fields are required.");
-        setLoading(false);
-        return;
-      }
-
-      // Sending POST request to backend
-      const response = await axios.post(
+      const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/register`,
-        formData
+        {
+          name,
+          lastName,
+          email,
+          password,
+          location,
+        }
       );
 
-      if (response.data.success) {
+
+      if (res?.data?.success) {
+        toast.success(res.data.message);
         navigate("/login");
+      } else {
+        toast.error(res.data.message);
       }
     } catch (error) {
-      console.error("Error during registration:", error);
-      setError(error.response?.data?.message || "Registration failed.");
-    } finally {
-      setLoading(false);
+      console.log("Error:", error);
+
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.message?.includes("Email already registered")
+      ) {
+        toast.error("Email already registered. Redirecting to login...");
+        navigate("/login");
+      } else {
+        toast.error("Something went wrong");
+      }
     }
   };
 
@@ -67,9 +63,19 @@ const Register = () => {
                   type="text"
                   className="form-control"
                   name="name"
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter Username"
-                  value={formData.name}
-                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="lastName"
+                  placeholder="Last Name"
+                  onChange={(e) => setLastname(e.target.value)}
                   required
                 />
               </div>
@@ -80,8 +86,7 @@ const Register = () => {
                   className="form-control"
                   name="email"
                   placeholder="Enter Email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -92,8 +97,7 @@ const Register = () => {
                   className="form-control"
                   name="password"
                   placeholder="Enter Password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
@@ -102,37 +106,18 @@ const Register = () => {
                 <input
                   type="text"
                   className="form-control"
-                  name="phone"
-                  placeholder="Enter Phone"
-                  value={formData.phone}
-                  onChange={handleChange}
+                  name="location"
+                  placeholder="Enter Location"
+                  onChange={(e) => setLocation(e.target.value)}
                   required
                 />
               </div>
 
-              <div className="mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="answer"
-                  placeholder="Enter Answer"
-                  value={formData.answer}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              
-
-              {error && <div className="text-danger mb-3">{error}</div>}
+              {/* {error && <div className="text-danger mb-3">{error}</div>} */}
 
               <div className="d-flex justify-content-center">
-                <button
-                  type="submit"
-                  className="btn btn-dark"
-                  disabled={loading}
-                >
-                  {loading ? "Registering..." : "Register"}
+                <button type="submit" className="btn btn-dark">
+                  Register
                 </button>
               </div>
             </form>
