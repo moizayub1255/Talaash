@@ -1,17 +1,20 @@
-import JWT from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer")) {
-    next("Auth Failed");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized - No Token Provided" });
   }
+
   const token = authHeader.split(" ")[1];
+
   try {
-    const payload = JWT.verify(token, process.env.JWT_SECRET);
-    req.user = { userId: payload.userId };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = { userId: decoded.userId };
     next();
   } catch (error) {
-    next("Auth Failed");
+    console.log("Invalid token", error.message);
+    return res.status(401).json({ message: "Unauthorized - Invalid Token" });
   }
 };
 

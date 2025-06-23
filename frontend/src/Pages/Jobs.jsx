@@ -1,15 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Jobs = () => {
+  const [jobs, setJobs] = useState([]);
+
+  const getJobs = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      // console.log(res.data);
+      setJobs(res.data?.jobs || []); // fallback to [] in case it's undefined
+    } catch (error) {
+      console.error("Failed to fetch jobs", error);
+      setJobs([]); // fallback in case of error
+    }
+  };
+
+  useEffect(() => {
+    getJobs();
+  }, []);
+
   return (
     <Headandfoot>
-      <div
-        id="carouselExampleSlidesOnly"
-        className="carousel slide"
-        data-bs-ride="carousel"
-      >
+      <div className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img src="/demo.jpeg" className="d-block w-100" alt="..." />
@@ -30,26 +51,23 @@ const Jobs = () => {
         </div>
 
         <div className="row g-4">
-          {[...Array(6)].map((_, index) => (
-            <div className="col-sm-12 col-md-6 col-lg-4" key={index}>
-              <div className="card h-100 shadow-sm border-0">
-                <img
-                  src="/demo.jpeg"
-                  className="card-img-top"
-                  alt="Job Banner"
-                />
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">Job Title {index + 1}</h5>
-                  <p className="card-text">
-                    A short description about the job role, responsibilities, or
-                    company.
-                  </p>
-                  <Link to="/job-details" className="btn btn-primary mt-auto">
-                    Apply Now
-                  </Link>
-                </div>
+          {jobs.map((job) => (
+            <Link to={`/job-details/${job._id}`} key={job._id}>
+              <div>
+               <img
+  src={job.image || "/default.jpeg"}
+  alt="Job"
+  width="300"
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/default.jpeg";
+  }}
+/>
+              
+                <h3>{job.position}</h3>
+                <p>{job.company}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

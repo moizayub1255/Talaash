@@ -20,7 +20,12 @@ import authRoutes from "./routes/authRoutes.js";
 import errroMiddelware from "./middelwares/errroMiddleware.js";
 import jobsRoutes from "./routes/jobsRoute.js";
 import userRoutes from "./routes/userRoutes.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import path from "path";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 //Dot ENV config
 dotenv.config();
 
@@ -64,6 +69,8 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/job", jobsRoutes);
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 //homeroute root
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(spec));
 
@@ -74,8 +81,5 @@ app.use(errroMiddelware);
 const PORT = process.env.PORT || 8080;
 //listen
 app.listen(PORT, () => {
-  console.log(
-    `Node Server Running on port no ${PORT}`
-      .bgCyan.white
-  );
+  console.log(`Node Server Running on port no ${PORT}`.bgCyan.white);
 });

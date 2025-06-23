@@ -3,23 +3,47 @@ import mongoose from "mongoose";
 import moment from "moment";
 // ====== CREATE JOB ======
 export const createJobController = async (req, res, next) => {
-  const { company, position } = req.body;
-  if (!company || !position) {
-    next("Please Provide All Fields");
+  try {
+    const { company, position, status, workType, description, image } =
+      req.body;
+    const imagePath = req.file
+  ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+  : `${req.protocol}://${req.get("host")}/default.jpeg`;
+    const jobData = {
+      company,
+      position,
+      description,
+      image: imagePath,
+
+      status: status || "pending",
+      workType: workType || "full-time",
+    };
+
+    // ✅ Only add createdBy if user is logged in
+    if (req.user?.userId) {
+      jobData.createdBy = req.user.userId;
+    }
+
+    const job = await jobsModel.create(jobData);
+
+    res.status(201).json({ job });
+  } catch (error) {
+    console.log("Create Job Error:", error);
+    res.status(500).json({ message: "Server Error" });
   }
-  req.body.createdBy = req.user.userId;
-  const job = await jobsModel.create(req.body);
-  res.status(201).json({ job });
 };
 
 // ======= GET JOBS ===========
 export const getAllJobsController = async (req, res, next) => {
   const { status, workType, search, sort } = req.query;
-  //conditons for searching filters
-  const queryObject = {
-    createdBy: req.user.userId,
-  };
-  //logic filters
+
+  const queryObject = {};
+
+  // ✅ Only filter by user if logged in
+  if (req.user && req.user.userId) {
+    queryObject.createdBy = req.user.userId;
+  }
+
   if (status && status !== "all") {
     queryObject.status = status;
   }
@@ -32,32 +56,23 @@ export const getAllJobsController = async (req, res, next) => {
 
   let queryResult = jobsModel.find(queryObject);
 
-  //sorting
-  if (sort === "latest") {
-    queryResult = queryResult.sort("-createdAt");
-  }
-  if (sort === "oldest") {
-    queryResult = queryResult.sort("createdAt");
-  }
-  if (sort === "a-z") {
-    queryResult = queryResult.sort("position");
-  }
-  if (sort === "z-a") {
-    queryResult = queryResult.sort("-position");
-  }
-  //pagination
+  if (sort === "latest") queryResult = queryResult.sort("-createdAt");
+  if (sort === "oldest") queryResult = queryResult.sort("createdAt");
+  if (sort === "a-z") queryResult = queryResult.sort("position");
+  if (sort === "z-a") queryResult = queryResult.sort("-position");
+
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
   queryResult = queryResult.skip(skip).limit(limit);
-  //jobs count
-  const totalJobs = await jobsModel.countDocuments(queryResult);
+
+  // ✅ Fix countDocuments here
+  const totalJobs = await jobsModel.countDocuments(queryObject);
   const numOfPage = Math.ceil(totalJobs / limit);
 
   const jobs = await queryResult;
 
-  // const jobs = await jobsModel.find({ createdBy: req.user.userId });
   res.status(200).json({
     totalJobs,
     jobs,
@@ -167,4 +182,10 @@ export const jobStatsController = async (req, res) => {
   res
     .status(200)
     .json({ totlaJob: stats.length, defaultStats, monthlyApplication });
+};
+
+export const getJobByIdController = async (req, res) => {
+  const job = await jobsModel.findById(req.params.id);
+  if (!job) return res.status(404).json({ message: "Job not found" });
+  res.status(200).json({ job });
 };

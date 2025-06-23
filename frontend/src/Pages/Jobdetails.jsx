@@ -1,18 +1,31 @@
-import React from 'react'
-import Headandfoot from './components/Headandfoot'
+// JobDetails.jsx
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
-const Jobdetails = () => {
+const JobDetails = () => {
+  const { id } = useParams();
+  const [job, setJob] = useState(null);
+
+  useEffect(() => {
+    const fetchJob = async () => {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/job/${id}`);
+      setJob(res.data.job);
+    };
+    fetchJob();
+  }, [id]);
+
+  if (!job) return <p>Loading...</p>;
+
   return (
-    <Headandfoot>
-        <div className="job-details">
-            <h1>Job Details</h1>
-            <p>Position: Software Engineer</p>
-            <p>Location: Remote</p>
-            <p>Salary: Competitive</p>
-            <p>Description: We are looking for a skilled software engineer to join our team. The ideal candidate will have experience in full-stack development and a passion for building innovative solutions.</p>
-        </div>
-    </Headandfoot>
-  )
-}
+    <div>
+      <img src={job.image} alt="Job" width="300" />
+      <h2>{job.position}</h2>
+      <p><strong>Company:</strong> {job.company}</p>
+      <p><strong>Location:</strong> {job.location}</p>
+      <p><strong>Description:</strong> {job.description}</p>
+    </div>
+  );
+};
 
-export default Jobdetails
+export default JobDetails;

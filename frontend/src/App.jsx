@@ -6,10 +6,12 @@ import Contact from "./Pages/Contact";
 import Jobs from "./Pages/Jobs";
 import Scholarship from "./Pages/Scholarship";
 import LostandFound from "./Pages/LostandFound";
-import Jobdetails from "./Pages/Jobdetails";
 import ScrollToTop from "./Pages/components/ScrollToTop";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
+import CreateJob from "./Pages/CreateJob";
+import PostAndSearch from "./Pages/PostAndSearch";
+import JobDetails from "./Pages/Jobdetails";
 
 const App = () => {
   return (
@@ -22,9 +24,12 @@ const App = () => {
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/scholarship" element={<Scholarship />} />
         <Route path="/lost-and-found" element={<LostandFound />} />
-        <Route path="/job-details" element={<Jobdetails />} />
+        <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/create-job" element={<CreateJob />} />
+        <Route path="/job-options" element={<PostAndSearch />} />
+        
       </Routes>
     </Router>
   );
