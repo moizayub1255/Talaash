@@ -69,13 +69,14 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/job", jobsRoutes);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //homeroute root
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(spec));
 
 //validation middelware
 app.use(errroMiddelware);
+
+app.use(cors());
 
 //port
 const PORT = process.env.PORT || 8080;

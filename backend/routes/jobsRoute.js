@@ -8,13 +8,13 @@ import {
   updateJobController,
 } from "../controllers/jobsController.js";
 import userAuth from "../middelwares/authMiddleware.js";
-import { upload } from "../middelwares/multer.js";
 
 const router = express.Router();
 
 //routes
 // CREATE JOB || POST
-router.post("/create-job", upload.single("image"), createJobController);
+router.post("/create-job", createJobController);
+
 
 //GET JOBS || GET
 router.get("/get-job", getAllJobsController);

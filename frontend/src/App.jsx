@@ -9,7 +9,6 @@ import LostandFound from "./Pages/LostandFound";
 import ScrollToTop from "./Pages/components/ScrollToTop";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
-import CreateJob from "./Pages/CreateJob";
 import PostAndSearch from "./Pages/PostAndSearch";
 import JobDetails from "./Pages/Jobdetails";
 
@@ -27,7 +26,6 @@ const App = () => {
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/create-job" element={<CreateJob />} />
         <Route path="/job-options" element={<PostAndSearch />} />
         
       </Routes>

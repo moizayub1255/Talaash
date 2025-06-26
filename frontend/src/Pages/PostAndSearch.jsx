@@ -10,8 +10,9 @@ const PostAndSearch = () => {
     company: "",
     position: "",
     description: "",
-    image: "",
     workLocation: "",
+    salary: "",
+    workType: "",
   });
 
   const navigate = useNavigate();
@@ -20,38 +21,39 @@ const PostAndSearch = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
- const handlePostJob = async (e) => {
-  e.preventDefault();
-  try {
-    const data = new FormData();
-    data.append("company", formData.company);
-    data.append("position", formData.position);
-    data.append("description", formData.description);
-    data.append("location", formData.workLocation);
-    data.append("image", formData.image); // file append
+  const handlePostJob = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        company: formData.company,
+        position: formData.position,
+        description: formData.description,
+        workLocation: formData.workLocation,
+        salary: formData.salary,
+        workType: formData.workType || "full-time",
+      };
 
-    await axios.post("http://localhost:5000/api/v1/job/create-job", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`, // if needed
-      },
-    });
+      await axios.post("http://localhost:5000/api/v1/job/create-job", data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-    toast.success("Job posted!");
-    setFormVisible(false);
-    setFormData({
-      company: "",
-      position: "",
-      description: "",
-      image: "",
-      workLocation: "",
-    });
-  } catch (err) {
-    console.error("Error posting job:", err);
-    toast.error("Failed to post job.");
-  }
-};
-
+      toast.success("Job posted!");
+      setFormVisible(false);
+      setFormData({
+        company: "",
+        position: "",
+        description: "",
+        workLocation: "",
+        salary: "",
+        workType: "",
+      });
+    } catch (err) {
+      console.error("Error posting job:", err);
+      toast.error("Failed to post job.");
+    }
+  };
 
   return (
     <Headandfoot>
@@ -99,21 +101,30 @@ const PostAndSearch = () => {
               onChange={handleChange}
               className="form-control mb-2"
             />
+
+            <input
+              type="text"
+              name="workType"
+              placeholder="Work Type (e.g. full-time, part-time, internship)"
+              value={formData.workType}
+              onChange={handleChange}
+              className="form-control mb-2"
+            />
+
+            <input
+              type="text"
+              name="salary"
+              placeholder="Salary (e.g. PKR 60,000/month)"
+              value={formData.salary}
+              onChange={handleChange}
+              className="form-control mb-2"
+            />
             <textarea
               name="description"
               placeholder="Job Description"
               value={formData.description}
               onChange={handleChange}
               className="form-control mb-2"
-            />
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={(e) =>
-                setFormData({ ...formData, image: e.target.files[0] })
-              }
-              className="form-control mb-3"
             />
 
             <button type="submit" className="btn btn-success">

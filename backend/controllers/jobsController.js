@@ -4,20 +4,17 @@ import moment from "moment";
 // ====== CREATE JOB ======
 export const createJobController = async (req, res, next) => {
   try {
-    const { company, position, status, workType, description, image } =
-      req.body;
-    const imagePath = req.file
-  ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-  : `${req.protocol}://${req.get("host")}/default.jpeg`;
-    const jobData = {
-      company,
-      position,
-      description,
-      image: imagePath,
+    const { company, position, status, workType, description,salary } = req.body;
 
-      status: status || "pending",
-      workType: workType || "full-time",
-    };
+const jobData = {
+  company,
+  position,
+  description,
+  salary,
+  status: status || "pending",
+  workType: workType || "full-time",
+};
+
 
     // ✅ Only add createdBy if user is logged in
     if (req.user?.userId) {
