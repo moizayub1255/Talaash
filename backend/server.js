@@ -23,6 +23,7 @@ import userRoutes from "./routes/userRoutes.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";
+import bodyParser from "body-parser";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,12 +56,22 @@ const spec = swaggerDoc(options);
 //rest object
 const app = express();
 
+app.use(cors({
+  origin: "http://localhost:5173", // frontend ka address
+  credentials: true,
+}));
+
+
+//body-parser
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+
 //middelwares
 app.use(helmet(``));
 app.use(xss());
 app.use(mongoSanitize());
-app.use(express.json());
-app.use(cors());
+
 app.use(morgan("dev"));
 
 //routes
@@ -70,13 +81,15 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/job", jobsRoutes);
 
 
+
+
 //homeroute root
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(spec));
 
 //validation middelware
 app.use(errroMiddelware);
 
-app.use(cors());
+
 
 //port
 const PORT = process.env.PORT || 8080;

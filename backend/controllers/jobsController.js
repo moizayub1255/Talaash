@@ -1,10 +1,12 @@
 import jobsModel from "../models/jobsModel.js";
 import mongoose from "mongoose";
 import moment from "moment";
+import nodemailer from "nodemailer";
+import { sendEmail } from "../utils/emailHelper.js";
 // ====== CREATE JOB ======
 export const createJobController = async (req, res, next) => {
   try {
-    const { company, position, status, workType, description,salary } = req.body;
+    const { company, position, status, workType, description,salary,posterEmail } = req.body;
 
 const jobData = {
   company,
@@ -13,6 +15,7 @@ const jobData = {
   salary,
   status: status || "pending",
   workType: workType || "full-time",
+  posterEmail: posterEmail,
 };
 
 
@@ -29,6 +32,49 @@ const jobData = {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+
+// ======= APPLY JOB ===========
+
+export const applyJobController = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, phone, coverLetter, cvFile } = req.body;
+
+  const job = await jobsModel.findById(id);
+  if (!job) return res.status(404).json({ message: "Job not found" });
+
+  const emailText = `
+New Job Application for: ${job.position}
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+
+Cover Letter:
+${coverLetter}
+  `;
+
+  // ✅ Attachment as base64
+  const attachments = [];
+
+  if (cvFile) {
+    attachments.push({
+      filename: `${name.replace(/ /g, "_")}_CV.pdf`,
+      content: cvFile.split("base64,")[1], // Remove prefix
+      encoding: "base64",
+    });
+  }
+
+  await sendEmail(
+    job.posterEmail,
+    `Application for ${job.position}`,
+    emailText,
+    attachments
+  );
+
+  res.status(200).json({ message: "Application submitted successfully" });
+};
+
 
 // ======= GET JOBS ===========
 export const getAllJobsController = async (req, res, next) => {

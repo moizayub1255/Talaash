@@ -18,10 +18,9 @@ const jobSchema = new mongoose.Schema(
     },
     description: { type: String },
 
-
     workType: {
       type: String,
-      enum: ["full-time", "part-time", "internship", "contract","remote"],
+      enum: ["full-time", "part-time", "internship", "contract", "remote"],
       default: "full-time",
     },
     workLocation: {
@@ -35,9 +34,13 @@ const jobSchema = new mongoose.Schema(
       required: false,
     },
     salary: {
-  type: String,
-  required: [true, "Salary is required"],
-},
+      type: String,
+      required: [true, "Salary is required"],
+    },
+    posterEmail: {
+      type: String,
+      required: [true, "Poster email is required"],
+    },
   },
   { timestamps: true }
 );

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  applyJobController,
   createJobController,
   deleteJobController,
   getAllJobsController,
@@ -14,6 +15,9 @@ const router = express.Router();
 //routes
 // CREATE JOB || POST
 router.post("/create-job", createJobController);
+
+
+router.post("/apply/:id", applyJobController);
 
 
 //GET JOBS || GET
