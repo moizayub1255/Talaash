@@ -6,6 +6,9 @@ import Headandfoot from "./components/Headandfoot";
 const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [applicant, setApplicant] = useState({ name: "", email: "", phone: "", coverLetter: "" ,cvFile: null,});
+
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -18,6 +21,41 @@ const JobDetails = () => {
     };
     fetchJob();
   }, [id]);
+
+  const handleApply = async (e) => {
+  e.preventDefault();
+
+  if (!applicant.cvFile) {
+    alert("Please upload your CV.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const base64CV = reader.result;
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/apply/${id}`,
+        {
+          ...applicant,
+          cvFile: base64CV, // ✅ send base64 string
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("Your application has been submitted!");
+      setShowModal(false);
+    } catch {
+      alert("Application failed. Try again.");
+    }
+  };
+
+  reader.readAsDataURL(applicant.cvFile); // ✅ Convert to base64
+};
 
   if (!job) return <p className="text-center mt-5">Loading...</p>;
 
@@ -59,9 +97,60 @@ const JobDetails = () => {
                 </p>
               </div>
               <div className="card-footer bg-white text-end">
-                <button className="btn btn-primary rounded-pill">
-                  Apply Now
-                </button>
+                <button className="btn btn-primary my-3" onClick={() => setShowModal(true)}>Apply Now</button>
+{showModal && (
+          <div className="modal show d-block" tabIndex="-1">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <form onSubmit={handleApply}>
+                  <div className="modal-header">
+                    <h5 className="modal-title">Apply for {job.position}</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                  </div>
+                  <div className="modal-body">
+                    {["name","email","phone","coverLetter"].map((field) => (
+                      <div className="mb-3" key={field}>
+                        <label className="form-label">{field === "coverLetter" ? "Cover Letter" : field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                        {field !== "coverLetter" ? (
+                          <input
+                            type={field === "email" ? "email" : "text"}
+                            name={field}
+                            value={applicant[field]}
+                            onChange={(e) => setApplicant({ ...applicant, [field]: e.target.value })}
+                            className="form-control" required
+                          />
+                        ) : (
+                          <textarea
+                            name="coverLetter"
+                            value={applicant.coverLetter}
+                            onChange={(e) => setApplicant({ ...applicant, coverLetter: e.target.value })}
+                            className="form-control" rows="4" required
+                          />
+                        )}
+                      </div>
+                    ))}
+                  <div className="mb-3">
+  <label className="form-label">Upload CV (PDF)</label>
+  <input
+    type="file"
+    accept="application/pdf"
+    className="form-control"
+    onChange={(e) =>
+      setApplicant({ ...applicant, cvFile: e.target.files[0] })
+    }
+    required
+  />
+</div>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
+                    <button type="submit" className="btn btn-primary">Submit Application</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
               </div>
             </div>
           </div>

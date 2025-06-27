@@ -13,6 +13,7 @@ const PostAndSearch = () => {
     workLocation: "",
     salary: "",
     workType: "",
+    posterEmail: "",
   });
 
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const PostAndSearch = () => {
         workLocation: formData.workLocation,
         salary: formData.salary,
         workType: formData.workType || "full-time",
+        posterEmail: formData.posterEmail,
       };
 
       await axios.post("http://localhost:5000/api/v1/job/create-job", data, {
@@ -48,10 +50,16 @@ const PostAndSearch = () => {
         workLocation: "",
         salary: "",
         workType: "",
+        posterEmail: "",
       });
     } catch (err) {
       console.error("Error posting job:", err);
       toast.error("Failed to post job.");
+    }
+
+    if (!formData.posterEmail || !formData.workType) {
+      toast.error("Please fill all required fields.");
+      return;
     }
   };
 
@@ -77,6 +85,11 @@ const PostAndSearch = () => {
 
         {formVisible && (
           <form onSubmit={handlePostJob} className="mt-4">
+            <p>
+              <i>
+                <strong>Note:</strong> Job once posted can not be deleted
+              </i>
+            </p>
             <input
               type="text"
               name="position"
@@ -102,14 +115,19 @@ const PostAndSearch = () => {
               className="form-control mb-2"
             />
 
-            <input
-              type="text"
+            <select
               name="workType"
-              placeholder="Work Type (e.g. full-time, part-time, internship)"
               value={formData.workType}
               onChange={handleChange}
               className="form-control mb-2"
-            />
+            >
+              <option value="">Select Work Type</option>
+              <option value="full-time">Full-time</option>
+              <option value="part-time">Part-time</option>
+              <option value="internship">Internship</option>
+              <option value="contract">Contract</option>
+              <option value="remote">Remote</option>
+            </select>
 
             <input
               type="text"
@@ -119,6 +137,17 @@ const PostAndSearch = () => {
               onChange={handleChange}
               className="form-control mb-2"
             />
+
+            <input
+              type="email"
+              name="posterEmail"
+              placeholder="Your Email (where applications will be sent)"
+              value={formData.posterEmail}
+              onChange={handleChange}
+              className="form-control mb-2"
+              required
+            />
+
             <textarea
               name="description"
               placeholder="Job Description"
