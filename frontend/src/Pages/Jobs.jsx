@@ -3,6 +3,7 @@ import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
 
