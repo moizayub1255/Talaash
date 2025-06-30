@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
+import { useAuth } from "@clerk/clerk-react";
+
 
 const PostAndSearch = () => {
+
   const [formVisible, setFormVisible] = useState(false);
   const [formData, setFormData] = useState({
     company: "",
@@ -22,45 +25,65 @@ const PostAndSearch = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePostJob = async (e) => {
-    e.preventDefault();
-    try {
-      const data = {
-        company: formData.company,
-        position: formData.position,
-        description: formData.description,
-        workLocation: formData.workLocation,
-        salary: formData.salary,
-        workType: formData.workType || "full-time",
-        posterEmail: formData.posterEmail,
-      };
+  const { getToken } = useAuth(); 
+  
+const handlePostJob = async (e) => {
+  e.preventDefault();
 
-      await axios.post("http://localhost:5000/api/v1/job/create-job", data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  if (!isSignedIn) {
+    toast.error("Please sign in first");
+    return;
+  }
 
-      toast.success("Job posted!");
-      setFormVisible(false);
-      setFormData({
-        company: "",
-        position: "",
-        description: "",
-        workLocation: "",
-        salary: "",
-        workType: "",
-        posterEmail: "",
-      });
-    } catch (err) {
-      console.error("Error posting job:", err);
-      toast.error("Failed to post job.");
-    }
+  try {
+    const token = await getToken(); // Clerk token mil gaya
+    const data = {
+      company: formData.company,
+      position: formData.position,
+      description: formData.description,
+      workLocation: formData.workLocation,
+      salary: formData.salary,
+      workType: formData.workType || "full-time",
+      posterEmail: user?.primaryEmailAddress?.emailAddress,
+    };
+
+    await axios.post("http://localhost:5000/api/v1/job/create-job", data, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Clerk token here!
+      },
+    });
+
+    toast.success("Job posted!");
+    setFormVisible(false);
+    setFormData({
+      company: "",
+      position: "",
+      description: "",
+      workLocation: "",
+      salary: "",
+      workType: "",
+      posterEmail: "",
+    });
+  } catch (err) {
+    console.error("Error posting job:", err);
+    toast.error("Failed to post job.");
+  }
+
+
 
     if (!formData.posterEmail || !formData.workType) {
       toast.error("Please fill all required fields.");
       return;
     }
+
+    if (!isSignedIn) {
+  return (
+    <div className="text-center mt-5">
+      <h3>Please sign in to access this page.</h3>
+    </div>
+  );
+}
+
   };
 
   return (
@@ -72,12 +95,14 @@ const PostAndSearch = () => {
           <button
             className="btn btn-primary me-3"
             onClick={() => setFormVisible(!formVisible)}
+            
           >
             Post a Job
           </button>
           <button
             className="btn btn-secondary"
             onClick={() => navigate("/jobs")}
+            
           >
             Search for Jobs
           </button>

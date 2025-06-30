@@ -7,8 +7,6 @@ import Jobs from "./Pages/Jobs";
 import Scholarship from "./Pages/Scholarship";
 import LostandFound from "./Pages/LostandFound";
 import ScrollToTop from "./Pages/components/ScrollToTop";
-import Register from "./Pages/Register";
-import Login from "./Pages/Login";
 import PostAndSearch from "./Pages/PostAndSearch";
 import JobDetails from "./Pages/Jobdetails";
 
@@ -24,8 +22,6 @@ const App = () => {
         <Route path="/scholarship" element={<Scholarship />} />
         <Route path="/lost-and-found" element={<LostandFound />} />
         <Route path="/job-details/:id" element={<JobDetails />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/job-options" element={<PostAndSearch />} />
         
       </Routes>

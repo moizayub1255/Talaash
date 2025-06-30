@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/auth.jsx";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 const Header = () => {
 
@@ -64,56 +65,20 @@ const Header = () => {
                 Lost and Found
               </Link>
             </li>
+
+
+            <li className="nav-item">
+              <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+            </li>
             
             
-            {!auth?.user ? (
-                <>
-                  <li className="nav-item">
-                    <Link to="/register" className="nav-link">
-                      Register
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/login" className="nav-link">
-                      Login
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="nav-item dropdown">
-                    <Link
-                      className="nav-link dropdown-toggle"
-                      href="#"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                    >
-                      {auth?.user?.name}
-                    </Link>
-                    <ul className="dropdown-menu">
-                      <li>
-                        <Link
-                          to={`/dashboard/${
-                            auth?.user?.role === 1 ? "admin" : "user"
-                          }`}
-                          className="dropdown-item"
-                        >
-                          Dashboard
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          onClick={handleLogout}
-                          to="/login"
-                          className="dropdown-item"
-                        >
-                          Logout
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                </>
-              )}
+            
+               
             
           </ul>
         </div>

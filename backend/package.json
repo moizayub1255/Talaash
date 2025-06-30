@@ -12,6 +12,8 @@
   "author": "TEchinfoyt",
   "license": "ISC",
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
+    "@clerk/express": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^2.2.0",
     "colors": "^1.4.0",

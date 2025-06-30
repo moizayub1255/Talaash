@@ -82,9 +82,9 @@ export const getAllJobsController = async (req, res, next) => {
 
   const queryObject = {};
 
-  // ✅ Only filter by user if logged in
-  if (req.user && req.user.userId) {
-    queryObject.createdBy = req.user.userId;
+  // ✅ Clerk Auth UserID
+  if (req.auth?.userId) {
+    queryObject.createdBy = req.auth.userId;
   }
 
   if (status && status !== "all") {
@@ -110,7 +110,6 @@ export const getAllJobsController = async (req, res, next) => {
 
   queryResult = queryResult.skip(skip).limit(limit);
 
-  // ✅ Fix countDocuments here
   const totalJobs = await jobsModel.countDocuments(queryObject);
   const numOfPage = Math.ceil(totalJobs / limit);
 

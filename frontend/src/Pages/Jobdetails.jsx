@@ -47,7 +47,7 @@ const JobDetails = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/apply/${id}`,
           {
             ...applicant,
-            cvFile: base64CV, // ✅ send base64 string
+            cvFile: base64CV, 
           },
           {
             headers: {
@@ -63,7 +63,7 @@ const JobDetails = () => {
       }
     };
 
-    reader.readAsDataURL(applicant.cvFile); // ✅ Convert to base64
+    reader.readAsDataURL(applicant.cvFile); 
   };
 
   if (!job) return <p className="text-center mt-5">Loading...</p>;

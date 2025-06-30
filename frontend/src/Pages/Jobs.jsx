@@ -2,21 +2,25 @@ import React, { useEffect, useState } from "react";
 import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "@clerk/clerk-react";
 
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
-
+const { getToken } = useAuth();
   const getJobs = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const token = await getToken();
+
+const res = await axios.get(
+  `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
       // console.log(res.data);
       setJobs(res.data?.jobs || []); // fallback to [] in case it's undefined
     } catch (error) {
