@@ -29,8 +29,7 @@ const jobSchema = new mongoose.Schema(
       required: [true, "Work location is required"],
     },
     createdBy: {
-    type: String, // Clerk userId
-    required: true,
+    type: String, 
   },
     salary: {
       type: String,

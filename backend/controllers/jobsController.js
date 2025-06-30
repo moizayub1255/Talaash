@@ -6,23 +6,29 @@ import { sendEmail } from "../utils/emailHelper.js";
 // ====== CREATE JOB ======
 export const createJobController = async (req, res, next) => {
   try {
-    const { company, position, status, workType, description,salary,posterEmail } = req.body;
+    const {
+      company,
+      position,
+      status,
+      workType,
+      description,
+      salary,
+      posterEmail,
+      workLocation,
+      createdBy,
+    } = req.body;
 
-const jobData = {
-  company,
-  position,
-  description,
-  salary,
-  status: status || "pending",
-  workType: workType || "full-time",
-  posterEmail: posterEmail,
-};
-
-
-    // ✅ Only add createdBy if user is logged in
-    if (req.user?.userId) {
-      jobData.createdBy = req.user.userId;
-    }
+    const jobData = {
+      company,
+      position,
+      description,
+      salary,
+      status: status || "pending",
+      workType: workType || "full-time",
+      posterEmail: posterEmail,
+      workLocation,
+      createdBy: createdBy || "anonymous",
+    };
 
     const job = await jobsModel.create(jobData);
 
@@ -33,7 +39,6 @@ const jobData = {
   }
 };
 
-
 // ======= APPLY JOB ===========
 
 export const applyJobController = async (req, res) => {
@@ -41,6 +46,14 @@ export const applyJobController = async (req, res) => {
   const { name, email, phone, coverLetter, cvFile } = req.body;
 
   const job = await jobsModel.findById(id);
+
+  if (!job.posterEmail) {
+    console.log("🚨 No posterEmail for job:", job._id);
+    return res
+      .status(400)
+      .json({ message: "Job poster email missing, cannot send application" });
+  }
+
   if (!job) return res.status(404).json({ message: "Job not found" });
 
   const emailText = `
@@ -75,17 +88,11 @@ ${coverLetter}
   res.status(200).json({ message: "Application submitted successfully" });
 };
 
-
 // ======= GET JOBS ===========
 export const getAllJobsController = async (req, res, next) => {
   const { status, workType, search, sort } = req.query;
 
   const queryObject = {};
-
-  // ✅ Clerk Auth UserID
-  if (req.auth?.userId) {
-    queryObject.createdBy = req.auth.userId;
-  }
 
   if (status && status !== "all") {
     queryObject.status = status;

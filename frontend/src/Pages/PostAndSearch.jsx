@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
-import { useAuth } from "@clerk/clerk-react";
 
 
 const PostAndSearch = () => {
@@ -25,18 +24,13 @@ const PostAndSearch = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const { getToken } = useAuth(); 
   
 const handlePostJob = async (e) => {
   e.preventDefault();
 
-  if (!isSignedIn) {
-    toast.error("Please sign in first");
-    return;
-  }
+  
 
   try {
-    const token = await getToken(); // Clerk token mil gaya
     const data = {
       company: formData.company,
       position: formData.position,
@@ -44,13 +38,11 @@ const handlePostJob = async (e) => {
       workLocation: formData.workLocation,
       salary: formData.salary,
       workType: formData.workType || "full-time",
-      posterEmail: user?.primaryEmailAddress?.emailAddress,
+      posterEmail: formData.posterEmail,
     };
 
     await axios.post("http://localhost:5000/api/v1/job/create-job", data, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Clerk token here!
-      },
+      
     });
 
     toast.success("Job posted!");
@@ -76,13 +68,7 @@ const handlePostJob = async (e) => {
       return;
     }
 
-    if (!isSignedIn) {
-  return (
-    <div className="text-center mt-5">
-      <h3>Please sign in to access this page.</h3>
-    </div>
-  );
-}
+    
 
   };
 

@@ -8,21 +8,19 @@ import {
   jobStatsController,
   updateJobController,
 } from "../controllers/jobsController.js";
-import { requireAuth } from "@clerk/express";
-import { protectRoute } from "../middelwares/clerkAuth.js";
 
 const router = express.Router();
 
 //routes
 // CREATE JOB || POST
-router.post("/create-job",protectRoute,requireAuth, createJobController);
+router.post("/create-job", createJobController);
 
 
-router.post("/apply/:id",protectRoute, requireAuth, applyJobController);
+router.post("/apply/:id", applyJobController);
 
 
 //GET JOBS || GET
-router.get("/get-job",protectRoute, requireAuth,getAllJobsController);
+router.get("/get-job",getAllJobsController);
 
 //UPDATE JOBS ||  PATCH
 router.patch("/update-job/:id", updateJobController);

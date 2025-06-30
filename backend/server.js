@@ -19,13 +19,11 @@ import mongoSanitize from "express-mongo-sanitize";
 import connectDB from "./config/db.js";
 import errroMiddelware from "./middelwares/errroMiddleware.js";
 import jobsRoutes from "./routes/jobsRoute.js";
-import ensureUserInDB from "./middelwares/ensureUserInDB.js";
 
 // -------------------- Utilities --------------------
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";
-import { clerkMiddleware } from "@clerk/express";
 
 // -------------------- App Config --------------------
 dotenv.config();
@@ -43,11 +41,7 @@ app.use(cors(corsOptions));
 // ✅ Handle CORS Preflight Requests (important)
 app.options("*", cors(corsOptions));
 
-// -------------------- Clerk Middleware --------------------
-app.use(clerkMiddleware());
 
-// 🌱 Ensure Clerk user exists in MongoDB
-app.use(ensureUserInDB);
 
 // -------------------- Connect to MongoDB --------------------
 connectDB();
