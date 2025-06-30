@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/auth.jsx";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
 
 const Header = () => {
-
-    const [auth, setAuth] = useAuth();
+  const [auth, setAuth] = useAuth();
 
   const handleLogout = () => {
     setAuth({
@@ -16,7 +20,6 @@ const Header = () => {
     localStorage.removeItem("auth");
     toast.success("Logout Successfully");
   };
-
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -56,7 +59,7 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/scholarship">
+              <Link className="nav-link" to="/scholarship-options">
                 Scholarships
               </Link>
             </li>
@@ -66,20 +69,14 @@ const Header = () => {
               </Link>
             </li>
 
-
             <li className="nav-item">
               <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
             </li>
-            
-            
-            
-               
-            
           </ul>
         </div>
       </div>

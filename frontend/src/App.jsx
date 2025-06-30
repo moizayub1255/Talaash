@@ -9,6 +9,8 @@ import LostandFound from "./Pages/LostandFound";
 import ScrollToTop from "./Pages/components/ScrollToTop";
 import PostAndSearch from "./Pages/PostAndSearch";
 import JobDetails from "./Pages/Jobdetails";
+import ScholarshipOptions from "./Pages/ScholarshipOptions";
+import ScholarshipDetails from "./Pages/ScholarshipDetails";
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
         <Route path="/lost-and-found" element={<LostandFound />} />
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/job-options" element={<PostAndSearch />} />
+        <Route path="/scholarship-options" element={<ScholarshipOptions />} />
+        <Route path="/scholarship-details/:id" element={<ScholarshipDetails />} />
         
       </Routes>
     </Router>

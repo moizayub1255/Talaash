@@ -19,6 +19,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import connectDB from "./config/db.js";
 import errroMiddelware from "./middelwares/errroMiddleware.js";
 import jobsRoutes from "./routes/jobsRoute.js";
+import ScholarshipRoutes from "./routes/ScholarshipRoutes.js";
 
 // -------------------- Utilities --------------------
 import { fileURLToPath } from "url";
@@ -74,6 +75,7 @@ app.use(morgan("dev"));
 
 // -------------------- Routes --------------------
 app.use("/api/v1/job", jobsRoutes);
+app.use("/api/v1/scholarship", ScholarshipRoutes);
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(spec));
 
 // -------------------- Error Handler --------------------
