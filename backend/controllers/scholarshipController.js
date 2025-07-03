@@ -129,3 +129,20 @@ export const getAllScholarshipController = async (req, res, next) => {
     numOfPage,
   });
 };
+
+
+export const getSingleScholarshipController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const scholarship = await ScholarshipModel.findById(id);
+    if (!scholarship) {
+      return res.status(404).json({ message: "Scholarship not found" });
+    }
+
+    res.status(200).json({ scholarship });
+  } catch (error) {
+    console.error("Error fetching scholarship:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

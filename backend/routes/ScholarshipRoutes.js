@@ -3,6 +3,7 @@ import {
   applyScholarshipController,
   createScholarshipController,
   getAllScholarshipController,
+  getSingleScholarshipController,
 } from "../controllers/scholarshipController.js";
 
 const router = express.Router();
@@ -11,9 +12,12 @@ const router = express.Router();
 // CREATE JOB || POST
 router.post("/create-scholarship", createScholarshipController);
 
-router.post("/scholarship/:id", applyScholarshipController);
+router.post("/apply/:id", applyScholarshipController);
 
 //GET JOBS || GET
 router.get("/get-scholarship", getAllScholarshipController);
+
+router.get("/scholarship/:id", getSingleScholarshipController);
+
 
 export default router;
