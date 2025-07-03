@@ -4,70 +4,74 @@ import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
 
-const ScholarshipDetails = () => {
+const LostDetails = () => {
   const { id } = useParams();
-  const [scholarship, setScholarship] = useState(null);
+  const [lost, setLost] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [applicant, setApplicant] = useState({
     name: "",
     email: "",
     phone: "",
     coverLetter: "",
-    cvFile: null,
   });
 
   useEffect(() => {
-    const fetchScholarship = async () => {
+    const fetchLost = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/scholarship/${id}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost/${id}`
         );
-        setScholarship(res.data.scholarship);
+        setLost(res.data.lost);
       } catch (error) {
-        console.error("Error fetching scholarship details:", error);
+        console.error("Error fetching Lost details:", error);
       }
     };
-    fetchScholarship();
+    fetchLost();
   }, [id]);
 
-  const handleApply = async (e) => {
+  const handleApply = (e) => {
     e.preventDefault();
 
-    if (!applicant.cvFile) {
-      toast.error("Please upload your CV.");
+    if (
+      !applicant.name ||
+      !applicant.email ||
+      !applicant.phone ||
+      !applicant.coverLetter
+    ) {
+      toast.error("Please fill in all fields.");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64CV = reader.result;
+    // Redirect to WhatsApp
+    const receiverPhone = lost?.reporterPhone?.replace(/[^0-9]/g, "");
+    if (!receiverPhone) {
+      toast.error("Reporter phone number is missing or invalid.");
+      return;
+    }
 
-      try {
-        await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/apply/${id}`,
-          {
+    const message = `
+Hello ${lost.reporterName},
 
-            ...applicant,
-            cvFile: base64CV, 
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+I found your lost item post on the website and I believe this item belongs to me.
 
-        toast.success("Your application has been submitted!");
-        setShowModal(false);
-      } catch {
-        toast.error("Application failed. Try again.");
-      }
-    };
+Name: ${applicant.name}
+Email: ${applicant.email}
+Phone: ${applicant.phone}
 
-    reader.readAsDataURL(applicant.cvFile); 
+Message:
+${applicant.coverLetter}
+
+Please contact me as soon as possible. Thank you!
+    `;
+
+    const whatsappLink = `https://wa.me/${receiverPhone}?text=${encodeURIComponent(
+      message
+    )}`;
+
+    window.location.href = whatsappLink;
   };
 
-  if (!scholarship) return <p className="text-center mt-5">Loading...</p>;
+  if (!lost) return <p className="text-center mt-5">Loading...</p>;
 
   return (
     <Headandfoot>
@@ -76,34 +80,38 @@ const ScholarshipDetails = () => {
           <div className="col-md-10 col-lg-8">
             <div className="card shadow-lg rounded-4">
               <img
-                src="/demo2.jpeg"
-                alt="Scholarship"
+                src={`http://localhost:5000${lost.imageUrl}`}
+                alt="lost"
                 className="card-img-top rounded-top-4"
                 style={{ height: "300px", objectFit: "cover" }}
               />
               <div className="card-body">
-                <h2 className="card-title mb-3">{scholarship.title}</h2>
+                <h2 className="card-title mb-3">{lost.itemName}</h2>
                 <p className="card-text mb-2">
-                  <strong>Eligibility</strong> {scholarship.eligibility}
+                  <strong>Item Type:</strong> {lost.itemType}
                 </p>
                 <p className="card-text mb-2">
-                  <strong>Deadline:</strong> {scholarship.deadline}
+                  <strong>Location:</strong> {lost.location}
                 </p>
                 <p className="card-text mb-2">
-                  <strong>Amount</strong> {scholarship.amount}
+                  <strong>Reporter Name:</strong> {lost.reporterName}
                 </p>
                 <p className="card-text mb-2">
-                  <strong>Scholarship Category:</strong> {scholarship.category}
+                  <strong>Reporter Phone:</strong> {lost.reporterPhone}
                 </p>
-                
+                <p className="card-text mb-4">
+                  <strong>Reporter Email:</strong>
+                  <br />
+                  {lost.reporterEmail || "No email provided"}
+                </p>
                 <p className="card-text mb-4">
                   <strong>Description:</strong>
                   <br />
-                  {scholarship.description || "No description provided"}
+                  {lost.description || "No description provided"}
                 </p>
                 <p className="text-muted small">
                   <strong>Posted on:</strong>{" "}
-                  {new Date(scholarship.createdAt).toLocaleDateString()}
+                  {new Date(lost.createdAt).toLocaleDateString()}
                 </p>
               </div>
               <div className="card-footer bg-white text-end">
@@ -111,8 +119,9 @@ const ScholarshipDetails = () => {
                   className="btn btn-primary my-3"
                   onClick={() => setShowModal(true)}
                 >
-                  Apply Now
+                  Claim Item
                 </button>
+
                 {showModal && (
                   <div
                     className="modal fade show d-block"
@@ -124,7 +133,7 @@ const ScholarshipDetails = () => {
                         <form onSubmit={handleApply}>
                           <div className="modal-header border-0 pb-0">
                             <h4 className="modal-title fw-bold">
-                              Apply for {scholarship.title}
+                              Claim {lost.itemName}
                             </h4>
                             <button
                               type="button"
@@ -135,9 +144,6 @@ const ScholarshipDetails = () => {
 
                           <div className="modal-body pt-0">
                             <div className="mt-3 mb-3">
-                              {/* <label className="form-label fw-semibold">
-                                Name
-                              </label> */}
                               <input
                                 type="text"
                                 className="form-control"
@@ -154,9 +160,6 @@ const ScholarshipDetails = () => {
                             </div>
 
                             <div className="mt-3 mb-3">
-                              {/* <label className="form-label fw-semibold">
-                                Email
-                              </label> */}
                               <input
                                 type="email"
                                 className="form-control"
@@ -173,13 +176,10 @@ const ScholarshipDetails = () => {
                             </div>
 
                             <div className="mt-3 mb-3">
-                              {/* <label className="form-label fw-semibold">
-                                Phone
-                              </label> */}
                               <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Your Phone Number "
+                                placeholder="Your Phone Number"
                                 value={applicant.phone}
                                 onChange={(e) =>
                                   setApplicant({
@@ -192,36 +192,15 @@ const ScholarshipDetails = () => {
                             </div>
 
                             <div className="mt-3 mb-3">
-                              {/* <label className="form-label fw-semibold">
-                                Cover Letter
-                              </label> */}
                               <textarea
                                 className="form-control"
                                 rows="4"
-                                placeholder="Write your cover letter here"
+                                placeholder="Write your message"
                                 value={applicant.coverLetter}
                                 onChange={(e) =>
                                   setApplicant({
                                     ...applicant,
                                     coverLetter: e.target.value,
-                                  })
-                                }
-                                required
-                              />
-                            </div>
-
-                            <div className="mb-3">
-                              <label className="form-label fw-semibold text-start d-block">
-                                Upload CV (PDF)
-                              </label>
-                              <input
-                                type="file"
-                                accept="application/pdf"
-                                className="form-control"
-                                onChange={(e) =>
-                                  setApplicant({
-                                    ...applicant,
-                                    cvFile: e.target.files[0],
                                   })
                                 }
                                 required
@@ -238,7 +217,7 @@ const ScholarshipDetails = () => {
                               Cancel
                             </button>
                             <button type="submit" className="btn btn-primary">
-                              Submit
+                              Send on WhatsApp
                             </button>
                           </div>
                         </form>
@@ -255,4 +234,4 @@ const ScholarshipDetails = () => {
   );
 };
 
-export default ScholarshipDetails;
+export default LostDetails;

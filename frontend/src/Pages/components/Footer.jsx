@@ -52,7 +52,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                to="/lost-and-found"
+                to="/lost-and-found-options"
                 className="text-decoration-none text-dark"
               >
                 Lost and Found

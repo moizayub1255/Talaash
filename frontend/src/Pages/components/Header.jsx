@@ -64,7 +64,7 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/lost-and-found">
+              <Link className="nav-link" to="/lost-and-found-options">
                 Lost and Found
               </Link>
             </li>

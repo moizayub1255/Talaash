@@ -11,6 +11,8 @@ import PostAndSearch from "./Pages/PostAndSearch";
 import JobDetails from "./Pages/Jobdetails";
 import ScholarshipOptions from "./Pages/ScholarshipOptions";
 import ScholarshipDetails from "./Pages/ScholarshipDetails";
+import Lostdetails from "./Pages/Lostdetails";
+import LostOptions from "./Pages/LostOptions";
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
         <Route path="/job-options" element={<PostAndSearch />} />
         <Route path="/scholarship-options" element={<ScholarshipOptions />} />
         <Route path="/scholarship-details/:id" element={<ScholarshipDetails />} />
+        <Route path="/lost-and-found-details/:id" element={<Lostdetails />} />
+        <Route path="/lost-and-found-options" element={<LostOptions />} />
         
       </Routes>
     </Router>
