@@ -38,12 +38,25 @@ const __dirname = dirname(__filename);
 connectDB();
 
 // -------------------- CORS Config --------------------
+// ✅ Allow both local & deployed frontend
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://talaash-nvel.vercel.app", // ✅ your frontend
+];
+
 const corsOptions = {
-  origin: "http://localhost:5173", // ✅ Frontend origin
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 };
+
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Preflight handling
+app.options("*", cors(corsOptions)); // Preflight
 
 // -------------------- Middlewares --------------------
 app.use(express.json({ limit: "10mb" }));
@@ -68,12 +81,12 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Job Portal Application",
-      description: "Node Expressjs Job Portal Application",
+      title: "Talaash Job Portal API",
+      description: "Backend APIs for Talaash Application",
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: process.env.BASE_URL || "http://localhost:5000", // ✅ dynamic URL
       },
     ],
   },
