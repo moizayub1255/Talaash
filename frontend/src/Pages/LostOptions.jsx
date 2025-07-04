@@ -64,7 +64,7 @@ const LostOptions = () => {
       };
 
       try {
-        await axios.post("http://localhost:5000/api/v1/lost/create-lost", data);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`, data);
         toast.success("Item posted!");
         setFormVisible(false);
         setFormData({

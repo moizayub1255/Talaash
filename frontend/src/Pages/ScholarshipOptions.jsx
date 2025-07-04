@@ -41,7 +41,7 @@ const ScholarshipOptions = () => {
       };
 
       await axios.post(
-        "http://localhost:5000/api/v1/scholarship/create-scholarship",
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/create-scholarship`,
         data,
         {}
       );

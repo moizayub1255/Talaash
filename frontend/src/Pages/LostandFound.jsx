@@ -10,7 +10,7 @@ const LostandFound = () => {
     const getLosts = async () => {
       try {
         
-          const res = await axios.get("http://localhost:5000/api/v1/lost/get-lost");
+          const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/get-lost`);
 
         
 
@@ -55,7 +55,7 @@ const LostandFound = () => {
               >
                 <div className="card h-100 shadow-sm border-0 rounded-4">
                   <img
-                   src={`http://localhost:5000${lost.imageUrl}`}
+                   src={`${import.meta.env.VITE_BACKEND_URL}${lost.imageUrl}`}
                     alt="Lost"
                     className="card-img-top rounded-top-4"
                     style={{ height: "180px", objectFit: "cover" }}

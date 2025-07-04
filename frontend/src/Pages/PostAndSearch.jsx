@@ -41,7 +41,7 @@ const handlePostJob = async (e) => {
       posterEmail: formData.posterEmail,
     };
 
-    await axios.post("http://localhost:5000/api/v1/job/create-job", data, {
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/job/create-job`, data, {
       
     });
 
