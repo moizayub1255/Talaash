@@ -13,17 +13,42 @@ import ScholarshipOptions from "./Pages/ScholarshipOptions";
 import ScholarshipDetails from "./Pages/ScholarshipDetails";
 import Lostdetails from "./Pages/Lostdetails";
 import LostOptions from "./Pages/LostOptions";
-import SignInPage from './pages/SignInPage';
-import SignUpPage from './pages/SignUpPage';
-
+import SignInPage from "./Pages/SignInPage";
+import SignUpPage from "./Pages/SignUpPage";
+import {
+  SignIn,
+  SignUp,
+  RedirectToSignIn,
+  SignedIn,
+  SignedOut,
+  ClerkLoaded,
+} from "@clerk/clerk-react";
+import { RedirectToUserProfile, useAuth } from "@clerk/clerk-react";
+import SaveClerkUser from "./Pages/SaveClerkUser";
 
 const App = () => {
   return (
     <Router>
       <ScrollToTop />
+      <ClerkLoaded>
+        <SignedIn>
+          <SaveClerkUser />
+        </SignedIn>
+      </ClerkLoaded>
       <Routes>
-          <Route path="/sign-in" element={<SignInPage />} />
-      <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route
+          path="/sign-in/sso-callback"
+          element={
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ minHeight: "100vh" }}
+            >
+              <p>Loading...</p>
+            </div>
+          }
+        />
+        <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -33,13 +58,12 @@ const App = () => {
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/job-options" element={<PostAndSearch />} />
         <Route path="/scholarship-options" element={<ScholarshipOptions />} />
-        <Route path="/scholarship-details/:id" element={<ScholarshipDetails />} />
+        <Route
+          path="/scholarship-details/:id"
+          element={<ScholarshipDetails />}
+        />
         <Route path="/lost-and-found-details/:id" element={<Lostdetails />} />
         <Route path="/lost-and-found-options" element={<LostOptions />} />
-
-        
-      
-        
       </Routes>
     </Router>
   );

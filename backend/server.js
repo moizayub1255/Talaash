@@ -21,6 +21,7 @@ import errroMiddelware from "./middelwares/errroMiddleware.js";
 import jobsRoutes from "./routes/jobsRoute.js";
 import ScholarshipRoutes from "./routes/ScholarshipRoutes.js";
 import LostRoutes from "./routes/LostRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 // -------------------- Utilities --------------------
 import { fileURLToPath } from "url";
@@ -85,6 +86,7 @@ app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/job", jobsRoutes);
 app.use("/api/v1/scholarship", ScholarshipRoutes);
 app.use("/api/v1/lost", LostRoutes);
+app.use("/api/auth", authRoutes);
 
 // -------------------- Error Handler --------------------
 app.use(errroMiddelware);
