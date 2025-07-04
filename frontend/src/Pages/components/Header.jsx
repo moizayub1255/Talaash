@@ -1,14 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth.jsx";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { toast } from "react-toastify"; // don't forget this import!
 
 const Header = () => {
+  const navigate = useNavigate();
   const [auth, setAuth] = useAuth();
 
   const handleLogout = () => {
@@ -19,6 +16,7 @@ const Header = () => {
     });
     localStorage.removeItem("auth");
     toast.success("Logout Successfully");
+    navigate("/"); // Redirect to home after logout
   };
 
   return (
@@ -69,10 +67,19 @@ const Header = () => {
               </Link>
             </li>
 
-            <li className="nav-item">
+            {/* Auth Buttons */}
+            <li className="nav-item d-flex align-items-center">
               <SignedOut>
-                <SignInButton />
+                <div className="d-flex gap-2">
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() => navigate("/sign-in")}
+                  >
+                    SignIn
+                  </button>
+                </div>
               </SignedOut>
+
               <SignedIn>
                 <UserButton />
               </SignedIn>

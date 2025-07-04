@@ -13,12 +13,17 @@ import ScholarshipOptions from "./Pages/ScholarshipOptions";
 import ScholarshipDetails from "./Pages/ScholarshipDetails";
 import Lostdetails from "./Pages/Lostdetails";
 import LostOptions from "./Pages/LostOptions";
+import SignInPage from './pages/SignInPage';
+import SignUpPage from './pages/SignUpPage';
+
 
 const App = () => {
   return (
     <Router>
       <ScrollToTop />
       <Routes>
+          <Route path="/sign-in" element={<SignInPage />} />
+      <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -31,6 +36,9 @@ const App = () => {
         <Route path="/scholarship-details/:id" element={<ScholarshipDetails />} />
         <Route path="/lost-and-found-details/:id" element={<Lostdetails />} />
         <Route path="/lost-and-found-options" element={<LostOptions />} />
+
+        
+      
         
       </Routes>
     </Router>

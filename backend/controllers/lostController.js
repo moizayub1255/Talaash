@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 import moment from "moment";
 import fs from "fs";
@@ -17,10 +16,10 @@ export const createLostController = async (req, res, next) => {
       reporterEmail,
       reporterPhone,
       imageBase64,
-        status,
+      status,
     } = req.body;
 
- let imageUrl = "";
+    let imageUrl = "";
     if (imageBase64) {
       const base64Data = imageBase64.split("base64,")[1];
       const ext = imageBase64.match(/data:image\/(\w+);base64,/)[1];
@@ -30,7 +29,7 @@ export const createLostController = async (req, res, next) => {
       imageUrl = `/uploads/${filename}`;
     }
     const LostData = {
-     itemName,
+      itemName,
       itemType,
       description,
       location,
@@ -39,7 +38,7 @@ export const createLostController = async (req, res, next) => {
       reporterEmail,
       reporterPhone,
       imageUrl,
-        status,
+      status,
     };
 
     const lost = await LostModel.create(LostData);
@@ -59,8 +58,6 @@ export const applylostController = async (req, res) => {
 
   const lost = await LostModel.findById(id);
 
-
-
   if (!lost) return res.status(404).json({ message: "Lost not found" });
 
   const emailText = `
@@ -73,9 +70,6 @@ Phone: ${phone}
 Cover Letter:
 ${coverLetter}
   `;
-
-
-  
 
   res.status(200).json({ message: "Application submitted successfully" });
 };
@@ -120,7 +114,6 @@ export const getAllLostController = async (req, res, next) => {
     numOfPage,
   });
 };
-
 
 export const getSingleLostController = async (req, res) => {
   try {
