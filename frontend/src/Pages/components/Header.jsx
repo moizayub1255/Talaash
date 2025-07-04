@@ -78,6 +78,14 @@ const Header = () => {
                     SignIn
                   </button>
                 </div>
+                <div className="d-flex gap-2">
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() => navigate("/sign-up")}
+                  >
+                    SignUp
+                  </button>
+                </div>
               </SignedOut>
 
               <SignedIn>
