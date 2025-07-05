@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
+import "../Styles/Options.css";
 
 const LostOptions = () => {
   const [formVisible, setFormVisible] = useState(false);
@@ -19,11 +20,20 @@ const LostOptions = () => {
     status: "pending",
   });
 
+  const [previewImage, setPreviewImage] = useState(null);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     if (e.target.name === "image") {
-      setFormData({ ...formData, image: e.target.files[0] });
+      const file = e.target.files[0];
+      setFormData({ ...formData, image: file });
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => setPreviewImage(reader.result);
+        reader.readAsDataURL(file);
+      }
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -32,15 +42,26 @@ const LostOptions = () => {
   const handlePostLost = async (e) => {
     e.preventDefault();
 
+    const {
+      itemName,
+      itemType,
+      location,
+      description,
+      reporterName,
+      reporterEmail,
+      reporterPhone,
+      image,
+    } = formData;
+
     if (
-      !formData.itemName ||
-      !formData.itemType ||
-      !formData.location ||
-      !formData.description ||
-      !formData.reporterName ||
-      !formData.reporterEmail ||
-      !formData.reporterPhone ||
-      !formData.image
+      !itemName ||
+      !itemType ||
+      !location ||
+      !description ||
+      !reporterName ||
+      !reporterEmail ||
+      !reporterPhone ||
+      !image
     ) {
       toast.error("Please fill all required fields.");
       return;
@@ -51,22 +72,19 @@ const LostOptions = () => {
       const base64 = reader.result;
 
       const data = {
-        itemName: formData.itemName,
-        itemType: formData.itemType,
-        description: formData.description,
-        location: formData.location,
-        date: formData.date,
-        reporterName: formData.reporterName,
-        reporterEmail: formData.reporterEmail,
-        reporterPhone: formData.reporterPhone,
+        ...formData,
         imageBase64: base64,
-        status: formData.status,
       };
 
       try {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`, data);
+        await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
+          data
+        );
+
         toast.success("Item posted!");
         setFormVisible(false);
+        setPreviewImage(null);
         setFormData({
           itemName: "",
           itemType: "",
@@ -81,40 +99,70 @@ const LostOptions = () => {
         });
       } catch (err) {
         console.error("Error posting Lost:", err);
-        toast.error("Failed to post Lost.");
+        toast.error("Failed to post Lost item.");
       }
     };
 
-    reader.readAsDataURL(formData.image);
+    reader.readAsDataURL(image);
   };
 
   return (
     <Headandfoot>
-      <div className="container py-5 text-center">
-        <h1 className="mb-4">Welcome to Lost and Found Portal</h1>
-
-        <div className="mb-3">
-          <button
-            className="btn btn-primary me-3"
-            onClick={() => setFormVisible(!formVisible)}
-          >
-            Post an Item
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => navigate("/lost-and-found")}
-          >
-            Search for Items
-          </button>
+      {/* 🎥 Hero Section */}
+      <div className="hero-video-container position-relative text-white">
+        <video className="hero-bg-video" autoPlay muted loop playsInline>
+          <source src="/lost.mp4" type="video/mp4" />
+        </video>
+        <div className="hero-overlay" />
+        <div className="hero-content container text-center">
+          <h1 className="display-4 fw-bold text-white">
+            Lost Something? <br /> Report It Here
+          </h1>
+          <p className="lead mb-4">
+            Help us reconnect people with their lost items. Post a lost item or
+            search through found listings.
+          </p>
+          <div className="d-flex justify-content-center gap-3 flex-wrap">
+            <button
+              onClick={() => setFormVisible(true)}
+              className="btn btn-success btn-lg"
+            >
+              Post An Item
+            </button>
+            <button
+              onClick={() => navigate("/lost-and-found")}
+              className="btn btn-primary btn-lg"
+            >
+              Search Lost Items
+            </button>
+          </div>
         </div>
+      </div>
 
+      {/* 📋 Form Section */}
+      <div className="container py-5">
         {formVisible && (
-          <form onSubmit={handlePostLost} className="mt-4">
-            <p>
-              <i>
-                <strong>Note:</strong> Item once posted can not be deleted
-              </i>
+          <form
+            onSubmit={handlePostLost}
+            className="bg-light p-4 rounded shadow"
+          >
+            <div className="text-end mb-3">
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={() => {
+                  setFormVisible(false);
+                  setPreviewImage(null);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+
+            <p className="text-muted text-center">
+              <strong>Note:</strong> Once posted, items cannot be deleted.
             </p>
+
             <input
               type="text"
               name="itemName"
@@ -122,6 +170,7 @@ const LostOptions = () => {
               value={formData.itemName}
               onChange={handleChange}
               className="form-control mb-2"
+              required
             />
             <input
               type="text"
@@ -130,6 +179,7 @@ const LostOptions = () => {
               value={formData.itemType}
               onChange={handleChange}
               className="form-control mb-2"
+              required
             />
             <input
               type="text"
@@ -138,8 +188,8 @@ const LostOptions = () => {
               value={formData.location}
               onChange={handleChange}
               className="form-control mb-2"
+              required
             />
-
             <input
               type="text"
               name="reporterName"
@@ -147,8 +197,8 @@ const LostOptions = () => {
               value={formData.reporterName}
               onChange={handleChange}
               className="form-control mb-2"
+              required
             />
-
             <div className="input-group mb-2">
               <span className="input-group-text">+92</span>
               <input
@@ -157,7 +207,7 @@ const LostOptions = () => {
                 placeholder="3031234567"
                 value={formData.reporterPhone}
                 onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, ""); // Only digits
+                  const value = e.target.value.replace(/\D/g, "");
                   if (value.length <= 10) {
                     setFormData({ ...formData, reporterPhone: value });
                   }
@@ -167,14 +217,6 @@ const LostOptions = () => {
                 required
               />
             </div>
-
-            <textarea
-              name="description"
-              placeholder="Item Description"
-              value={formData.description}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
             <input
               type="email"
               name="reporterEmail"
@@ -182,6 +224,22 @@ const LostOptions = () => {
               value={formData.reporterEmail}
               onChange={handleChange}
               className="form-control mb-2"
+              required
+            />
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              className="form-control mb-2"
+            />
+            <textarea
+              name="description"
+              placeholder="Item Description"
+              value={formData.description}
+              onChange={handleChange}
+              className="form-control mb-2"
+              required
             />
 
             <input
@@ -190,11 +248,25 @@ const LostOptions = () => {
               accept="image/*"
               onChange={handleChange}
               className="form-control mb-2"
+              required
             />
 
-            <button type="submit" className="btn btn-success">
-              Post Item
-            </button>
+            {previewImage && (
+              <div className="text-center mb-3">
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="img-thumbnail"
+                  style={{ maxWidth: "300px" }}
+                />
+              </div>
+            )}
+
+            <div className="text-center">
+              <button type="submit" className="btn btn-success px-4">
+                Post Item
+              </button>
+            </div>
           </form>
         )}
       </div>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
+import "../Styles/Options.css";
 
 const ScholarshipOptions = () => {
   const [formVisible, setFormVisible] = useState(false);
@@ -27,23 +28,31 @@ const ScholarshipOptions = () => {
   const handlePostScholarship = async (e) => {
     e.preventDefault();
 
+    // ✅ Validation First
+    if (
+      !formData.posterEmail ||
+      !formData.postedBy ||
+      !formData.title ||
+      !formData.description ||
+      !formData.eligibility ||
+      !formData.deadline ||
+      !formData.amount ||
+      !formData.category ||
+      !formData.country
+    ) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+
     try {
       const data = {
-        title: formData.title,
-        description: formData.description,
-        eligibility: formData.eligibility,
-        deadline: formData.deadline,
-        amount: formData.amount,
-        category: formData.category,
-        country: formData.country,
+        ...formData,
         postedBy: formData.postedBy || "Anonymous",
-        posterEmail: formData.posterEmail,
       };
 
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/create-scholarship`,
-        data,
-        {}
+        data
       );
 
       toast.success("Scholarship posted!");
@@ -60,54 +69,67 @@ const ScholarshipOptions = () => {
         posterEmail: "",
       });
     } catch (err) {
-      console.error("Error posting Scholarship:", err);
-      toast.error("Failed to post Scholarship.");
-    }
-
-    if (
-      !formData.posterEmail ||
-      !formData.postedBy ||
-      !formData.title ||
-      !formData.description ||
-      !formData.eligibility ||
-      !formData.deadline ||
-      !formData.amount ||
-      !formData.category ||
-      !formData.country
-    ) {
-      toast.error("Please fill all required fields.");
-      return;
+      console.error("Error posting scholarship:", err);
+      toast.error("Failed to post scholarship.");
     }
   };
 
   return (
     <Headandfoot>
-      <div className="container py-5 text-center">
-        <h1 className="mb-4">Welcome to Scholarship Portal</h1>
+      {/* 🎥 Hero Section with Background Video */}
+      <div className="hero-video-container position-relative text-white">
+        <video className="hero-bg-video" autoPlay muted loop playsInline>
+          <source src="/scholarship.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
-        <div className="mb-3">
-          <button
-            className="btn btn-primary me-3"
-            onClick={() => setFormVisible(!formVisible)}
-          >
-            Post a Scholarship
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => navigate("/scholarship")}
-          >
-            Search for Scholarships
-          </button>
+        <div className="hero-overlay" />
+
+        <div className="hero-content container text-center">
+          <h1 className="display-4 fw-bold text-white">
+            Discover Scholarships<br /> That Shape Your Future
+          </h1>
+          <p className="lead mb-4">
+            Explore opportunities to fund your education and achieve your academic goals — locally and globally.
+          </p>
+          <div className="d-flex justify-content-center gap-3 flex-wrap">
+            <button
+              onClick={() => setFormVisible(true)}
+              className="btn btn-success btn-lg"
+            >
+              Post a Scholarship
+            </button>
+            <button
+              onClick={() => navigate("/scholarship")}
+              className="btn btn-primary btn-lg"
+            >
+              Search Scholarships
+            </button>
+          </div>
         </div>
+      </div>
 
+      {/* 📄 Form Section */}
+      <div className="container py-5">
         {formVisible && (
-          <form onSubmit={handlePostScholarship} className="mt-4">
-            <p>
-              <i>
-                <strong>Note:</strong> Scholarship once posted can not be
-                deleted
-              </i>
+          <form
+            onSubmit={handlePostScholarship}
+            className="bg-light p-4 rounded shadow"
+          >
+            <div className="text-end mb-3">
+              <button
+                className="btn btn-outline-danger"
+                type="button"
+                onClick={() => setFormVisible(false)}
+              >
+                Cancel
+              </button>
+            </div>
+
+            <p className="text-muted text-center">
+              <strong>Note:</strong> Once a scholarship is posted, it cannot be deleted.
             </p>
+
             <input
               type="text"
               name="title"
@@ -132,7 +154,6 @@ const ScholarshipOptions = () => {
               onChange={handleChange}
               className="form-control mb-2"
             />
-
             <input
               type="text"
               name="category"
@@ -141,7 +162,6 @@ const ScholarshipOptions = () => {
               onChange={handleChange}
               className="form-control mb-2"
             />
-
             <input
               type="text"
               name="country"
@@ -150,43 +170,43 @@ const ScholarshipOptions = () => {
               onChange={handleChange}
               className="form-control mb-2"
             />
-            <textarea
+            <input
+              type="text"
               name="postedBy"
-              placeholder="Posted By"
+              placeholder="Posted By (Name)"
               value={formData.postedBy}
               onChange={handleChange}
               className="form-control mb-2"
             />
             <input
-              name="posterEmail"
               type="email"
+              name="posterEmail"
               placeholder="Poster Email"
               value={formData.posterEmail}
               onChange={handleChange}
               className="form-control mb-2"
             />
-
             <input
               type="date"
               name="deadline"
-              placeholder="Application Deadline"
               value={formData.deadline}
               onChange={handleChange}
               className="form-control mb-2"
-              required
             />
-
             <textarea
               name="description"
               placeholder="Scholarship Description"
               value={formData.description}
               onChange={handleChange}
-              className="form-control mb-2"
+              rows="4"
+              className="form-control mb-3"
             />
 
-            <button type="submit" className="btn btn-success">
-              Post Scholarship
-            </button>
+            <div className="text-center">
+              <button type="submit" className="btn btn-success px-4">
+                Post Scholarship
+              </button>
+            </div>
           </form>
         )}
       </div>
