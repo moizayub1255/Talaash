@@ -41,7 +41,7 @@ connectDB();
 // ✅ Allow both local & deployed frontend
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://talaash-nvel.vercel.app", // ✅ your frontend
+  "https://talaash-77zk.vercel.app",
 ];
 
 const corsOptions = {
