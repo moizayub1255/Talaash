@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import PostAndSearch from "./PostAndSearch";
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -26,19 +27,7 @@ const Jobs = () => {
 
   return (
     <Headandfoot>
-      <div className="carousel slide" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img src="/demo.jpeg" className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src="/demo.jpeg" className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src="/demo.jpeg" className="d-block w-100" alt="..." />
-          </div>
-        </div>
-      </div>
+      <PostAndSearch/>
 
       <div className="available-jobs py-5 px-3">
         <div className="text-center mb-4">

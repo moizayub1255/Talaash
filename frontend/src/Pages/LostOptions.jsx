@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
 import "../Styles/Options.css";
 
 const LostOptions = () => {
-  const [formVisible, setFormVisible] = useState(false);
   const [formData, setFormData] = useState({
     itemName: "",
     itemType: "",
@@ -21,7 +19,6 @@ const LostOptions = () => {
   });
 
   const [previewImage, setPreviewImage] = useState(null);
-
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -83,7 +80,6 @@ const LostOptions = () => {
         );
 
         toast.success("Item posted!");
-        setFormVisible(false);
         setPreviewImage(null);
         setFormData({
           itemName: "",
@@ -97,6 +93,11 @@ const LostOptions = () => {
           image: null,
           status: "pending",
         });
+
+        // Close modal
+        const modalEl = document.getElementById("lostItemModal");
+        const modal = window.bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
       } catch (err) {
         console.error("Error posting Lost:", err);
         toast.error("Failed to post Lost item.");
@@ -107,7 +108,7 @@ const LostOptions = () => {
   };
 
   return (
-    <Headandfoot>
+    <>
       {/* 🎥 Hero Section */}
       <div className="hero-video-container position-relative text-white">
         <video className="hero-bg-video" autoPlay muted loop playsInline>
@@ -124,8 +125,9 @@ const LostOptions = () => {
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-              onClick={() => setFormVisible(true)}
               className="btn btn-success btn-lg"
+              data-bs-toggle="modal"
+              data-bs-target="#lostItemModal"
             >
               Post An Item
             </button>
@@ -139,138 +141,150 @@ const LostOptions = () => {
         </div>
       </div>
 
-      {/* 📋 Form Section */}
-      <div className="container py-5">
-        {formVisible && (
-          <form
-            onSubmit={handlePostLost}
-            className="bg-light p-4 rounded shadow"
-          >
-            <div className="text-end mb-3">
-              <button
-                type="button"
-                className="btn btn-outline-danger"
-                onClick={() => {
-                  setFormVisible(false);
-                  setPreviewImage(null);
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-
-            <p className="text-muted text-center">
-              <strong>Note:</strong> Once posted, items cannot be deleted.
-            </p>
-
-            <input
-              type="text"
-              name="itemName"
-              placeholder="Item Title"
-              value={formData.itemName}
-              onChange={handleChange}
-              className="form-control mb-2"
-              required
-            />
-            <input
-              type="text"
-              name="itemType"
-              placeholder="Item Type (e.g. Electronics, Clothing)"
-              value={formData.itemType}
-              onChange={handleChange}
-              className="form-control mb-2"
-              required
-            />
-            <input
-              type="text"
-              name="location"
-              placeholder="Location (e.g. University Campus)"
-              value={formData.location}
-              onChange={handleChange}
-              className="form-control mb-2"
-              required
-            />
-            <input
-              type="text"
-              name="reporterName"
-              placeholder="Your Name"
-              value={formData.reporterName}
-              onChange={handleChange}
-              className="form-control mb-2"
-              required
-            />
-            <div className="input-group mb-2">
-              <span className="input-group-text">+92</span>
-              <input
-                type="text"
-                name="reporterPhone"
-                placeholder="3031234567"
-                value={formData.reporterPhone}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, "");
-                  if (value.length <= 10) {
-                    setFormData({ ...formData, reporterPhone: value });
-                  }
-                }}
-                className="form-control"
-                maxLength={10}
-                required
-              />
-            </div>
-            <input
-              type="email"
-              name="reporterEmail"
-              placeholder="Your Email"
-              value={formData.reporterEmail}
-              onChange={handleChange}
-              className="form-control mb-2"
-              required
-            />
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <textarea
-              name="description"
-              placeholder="Item Description"
-              value={formData.description}
-              onChange={handleChange}
-              className="form-control mb-2"
-              required
-            />
-
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={handleChange}
-              className="form-control mb-2"
-              required
-            />
-
-            {previewImage && (
-              <div className="text-center mb-3">
-                <img
-                  src={previewImage}
-                  alt="Preview"
-                  className="img-thumbnail"
-                  style={{ maxWidth: "300px" }}
-                />
+      {/* 🧾 Modal Form */}
+      <div
+        className="modal fade"
+        id="lostItemModal"
+        tabIndex="-1"
+        aria-labelledby="lostItemModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-lg modal-dialog-centered">
+          <div className="modal-content">
+            <form onSubmit={handlePostLost}>
+              <div className="modal-header">
+                <h5 className="modal-title" id="lostItemModalLabel">
+                  Post a Lost Item
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                  onClick={() => setPreviewImage(null)}
+                ></button>
               </div>
-            )}
+              <div className="modal-body">
+                <p className="text-muted text-center">
+                  <strong>Note:</strong> Once posted, items cannot be deleted.
+                </p>
 
-            <div className="text-center">
-              <button type="submit" className="btn btn-success px-4">
-                Post Item
-              </button>
-            </div>
-          </form>
-        )}
+                <input
+                  type="text"
+                  name="itemName"
+                  placeholder="Item Title"
+                  value={formData.itemName}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="itemType"
+                  placeholder="Item Type (e.g. Electronics, Clothing)"
+                  value={formData.itemType}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="Location (e.g. University Campus)"
+                  value={formData.location}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="reporterName"
+                  placeholder="Your Name"
+                  value={formData.reporterName}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <div className="input-group mb-2">
+                  <span className="input-group-text">+92</span>
+                  <input
+                    type="text"
+                    name="reporterPhone"
+                    placeholder="3031234567"
+                    value={formData.reporterPhone}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, "");
+                      if (value.length <= 10) {
+                        setFormData({ ...formData, reporterPhone: value });
+                      }
+                    }}
+                    className="form-control"
+                    maxLength={10}
+                    required
+                  />
+                </div>
+                <input
+                  type="email"
+                  name="reporterEmail"
+                  placeholder="Your Email"
+                  value={formData.reporterEmail}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                />
+                <textarea
+                  name="description"
+                  placeholder="Item Description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+
+                {previewImage && (
+                  <div className="text-center mb-3">
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      className="img-thumbnail"
+                      style={{ maxWidth: "300px" }}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  onClick={() => setPreviewImage(null)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-success">
+                  Post Item
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </Headandfoot>
+    </>
   );
 };
 

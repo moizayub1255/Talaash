@@ -36,13 +36,13 @@ const Header = () => {
               <NavLink to="/" className="nav-link">Home</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/job-options" className="nav-link">Jobs</NavLink>
+              <NavLink to="/jobs" className="nav-link">Jobs</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/scholarship-options" className="nav-link">Scholarships</NavLink>
+              <NavLink to="/scholarship" className="nav-link">Scholarships</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/lost-and-found-options" className="nav-link">Lost & Found</NavLink>
+              <NavLink to="/lost-and-found" className="nav-link">Lost & Found</NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/about" className="nav-link">About</NavLink>

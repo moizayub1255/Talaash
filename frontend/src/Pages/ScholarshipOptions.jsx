@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import "../Styles/Options.css";
 
 const ScholarshipOptions = () => {
-  const [formVisible, setFormVisible] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -28,35 +27,40 @@ const ScholarshipOptions = () => {
   const handlePostScholarship = async (e) => {
     e.preventDefault();
 
-    // ✅ Validation First
+    const {
+      title,
+      description,
+      eligibility,
+      deadline,
+      amount,
+      category,
+      country,
+      postedBy,
+      posterEmail,
+    } = formData;
+
     if (
-      !formData.posterEmail ||
-      !formData.postedBy ||
-      !formData.title ||
-      !formData.description ||
-      !formData.eligibility ||
-      !formData.deadline ||
-      !formData.amount ||
-      !formData.category ||
-      !formData.country
+      !title ||
+      !description ||
+      !eligibility ||
+      !deadline ||
+      !amount ||
+      !category ||
+      !country ||
+      !postedBy ||
+      !posterEmail
     ) {
       toast.error("Please fill all required fields.");
       return;
     }
 
     try {
-      const data = {
-        ...formData,
-        postedBy: formData.postedBy || "Anonymous",
-      };
-
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/create-scholarship`,
-        data
+        { ...formData }
       );
 
       toast.success("Scholarship posted!");
-      setFormVisible(false);
       setFormData({
         title: "",
         description: "",
@@ -68,6 +72,11 @@ const ScholarshipOptions = () => {
         postedBy: "",
         posterEmail: "",
       });
+
+      // Close modal
+      const modalEl = document.getElementById("scholarshipModal");
+      const modal = window.bootstrap.Modal.getInstance(modalEl);
+      modal.hide();
     } catch (err) {
       console.error("Error posting scholarship:", err);
       toast.error("Failed to post scholarship.");
@@ -75,27 +84,27 @@ const ScholarshipOptions = () => {
   };
 
   return (
-    <Headandfoot>
-      {/* 🎥 Hero Section with Background Video */}
+    <>
+      {/* 🎥 Hero Section */}
       <div className="hero-video-container position-relative text-white">
         <video className="hero-bg-video" autoPlay muted loop playsInline>
           <source src="/scholarship.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
         </video>
 
         <div className="hero-overlay" />
 
         <div className="hero-content container text-center">
           <h1 className="display-4 fw-bold text-white">
-            Discover Scholarships<br /> That Shape Your Future
+            Discover Scholarships <br /> That Shape Your Future
           </h1>
           <p className="lead mb-4">
             Explore opportunities to fund your education and achieve your academic goals — locally and globally.
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-              onClick={() => setFormVisible(true)}
               className="btn btn-success btn-lg"
+              data-bs-toggle="modal"
+              data-bs-target="#scholarshipModal"
             >
               Post a Scholarship
             </button>
@@ -109,108 +118,131 @@ const ScholarshipOptions = () => {
         </div>
       </div>
 
-      {/* 📄 Form Section */}
-      <div className="container py-5">
-        {formVisible && (
-          <form
-            onSubmit={handlePostScholarship}
-            className="bg-light p-4 rounded shadow"
-          >
-            <div className="text-end mb-3">
-              <button
-                className="btn btn-outline-danger"
-                type="button"
-                onClick={() => setFormVisible(false)}
-              >
-                Cancel
-              </button>
-            </div>
+      {/* 🧾 Modal Form */}
+      <div
+        className="modal fade"
+        id="scholarshipModal"
+        tabIndex="-1"
+        aria-labelledby="scholarshipModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-lg modal-dialog-centered">
+          <div className="modal-content">
+            <form onSubmit={handlePostScholarship}>
+              <div className="modal-header">
+                <h5 className="modal-title" id="scholarshipModalLabel">
+                  Post a Scholarship
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p className="text-muted text-center">
+                  <strong>Note:</strong> Once posted, scholarships cannot be deleted.
+                </p>
 
-            <p className="text-muted text-center">
-              <strong>Note:</strong> Once a scholarship is posted, it cannot be deleted.
-            </p>
-
-            <input
-              type="text"
-              name="title"
-              placeholder="Scholarship Title"
-              value={formData.title}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <input
-              type="text"
-              name="eligibility"
-              placeholder="Eligibility Criteria"
-              value={formData.eligibility}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <input
-              type="text"
-              name="amount"
-              placeholder="Amount (e.g. PKR 50,000)"
-              value={formData.amount}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <input
-              type="text"
-              name="category"
-              placeholder="Category (e.g. Education, Research)"
-              value={formData.category}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <input
-              type="text"
-              name="country"
-              placeholder="Country (e.g. Pakistan)"
-              value={formData.country}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <input
-              type="text"
-              name="postedBy"
-              placeholder="Posted By (Name)"
-              value={formData.postedBy}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <input
-              type="email"
-              name="posterEmail"
-              placeholder="Poster Email"
-              value={formData.posterEmail}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <input
-              type="date"
-              name="deadline"
-              value={formData.deadline}
-              onChange={handleChange}
-              className="form-control mb-2"
-            />
-            <textarea
-              name="description"
-              placeholder="Scholarship Description"
-              value={formData.description}
-              onChange={handleChange}
-              rows="4"
-              className="form-control mb-3"
-            />
-
-            <div className="text-center">
-              <button type="submit" className="btn btn-success px-4">
-                Post Scholarship
-              </button>
-            </div>
-          </form>
-        )}
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Scholarship Title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="eligibility"
+                  placeholder="Eligibility Criteria"
+                  value={formData.eligibility}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="amount"
+                  placeholder="Amount (e.g. PKR 50,000)"
+                  value={formData.amount}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="category"
+                  placeholder="Category (e.g. Education, Research)"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="country"
+                  placeholder="Country (e.g. Pakistan)"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="text"
+                  name="postedBy"
+                  placeholder="Posted By (Name)"
+                  value={formData.postedBy}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="email"
+                  name="posterEmail"
+                  placeholder="Poster Email"
+                  value={formData.posterEmail}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="date"
+                  name="deadline"
+                  value={formData.deadline}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <textarea
+                  name="description"
+                  placeholder="Scholarship Description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="form-control mb-3"
+                  rows="4"
+                  required
+                />
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-success">
+                  Post Scholarship
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </Headandfoot>
+    </>
   );
 };
 

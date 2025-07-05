@@ -41,7 +41,6 @@ connectDB();
 // ✅ Allow both local & deployed frontend
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://talaash-77zk.vercel.app",
 ];
 
 const corsOptions = {
@@ -86,7 +85,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: process.env.BASE_URL || "http://localhost:5000", // ✅ dynamic URL
+        url: "http://localhost:5000", // ✅ dynamic URL
       },
     ],
   },

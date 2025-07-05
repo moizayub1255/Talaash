@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import LostOptions from "./LostOptions";
 
 const LostandFound = () => {
   const [lost, setLosts] = useState([]);
@@ -26,19 +27,8 @@ const LostandFound = () => {
 
   return (
     <Headandfoot>
-      <div className="carousel slide" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img src="/demo.jpeg" className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src="/demo.jpeg" className="d-block w-100" alt="..." />
-          </div>
-          <div className="carousel-item">
-            <img src="/demo.jpeg" className="d-block w-100" alt="..." />
-          </div>
-        </div>
-      </div>
+
+      <LostOptions/>
 
       <div className="available-losts py-5 px-3">
         <div className="text-center mb-4">
@@ -61,21 +51,22 @@ const LostandFound = () => {
                     style={{ height: "180px", objectFit: "cover" }}
                   />
                   <div className="card-body">
-                    <h5 className="card-title">{lost.position}</h5>
+                    <h5 className="card-title">{lost.itemName}</h5>
                     <p className="card-text mb-1">
-                      <strong>Company:</strong> {lost.company}
+                      <strong>Type:</strong> {lost.itemType}
                     </p>
                     <p className="card-text mb-1">
-                      <strong>Location:</strong> {lost.workLocation}
+                      <strong>Location:</strong> {lost.location}
                     </p>
                     <p className="card-text mb-1">
-                      <strong>Type:</strong> {lost.workType}
+                      <strong>Founder Name:</strong> {lost.reporterName}
                     </p>
                     <p className="card-text mb-1">
-                      <strong>Salary:</strong> {lost.salary}
+                      <strong>Founder Phone:</strong> {lost.reporterPhone}
                     </p>
 
                     <p className="card-text text-muted">
+                      <strong>Description:</strong>
                       {lost.description?.length > 80
                         ? lost.description.slice(0, 80) + "..."
                         : lost.description}
