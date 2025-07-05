@@ -1,82 +1,95 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../Styles/Footer.css";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaLinkedinIn,
+  FaYoutube,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+} from "react-icons/fa";
+import "../../Styles/Footer.css"; 
 
 const Footer = () => {
   return (
-    <div className="main footer-container container-fluid  py-4">
-      <div className="row text-md-start">
-        {/* Left Section */}
-        <div className="col-12 col-md-4 mb-4">
-          <img src="/" alt="Talaash" className="img-fluid mb-2" />
-          <p>
-            We are a team of talented workers. We build modern, responsive
-            websites and help you grow online with a strong presence.
-          </p>
+    <footer className="bg-dark text-white pt-5 pb-4">
+      <div className="container text-md-left">
+        <div className="row text-md-start">
+          {/* Company */}
+          <div className="col-md-3 col-lg-3 col-xl-3 mb-4">
+            <h5 className="text-uppercase mb-4 font-weight-bold text-white">Company</h5>
+            <p><Link className="text-white text-decoration-none" to="/about">About Us</Link></p>
+            <p><Link className="text-white text-decoration-none" to="/contact">Contact Us</Link></p>
+            <p><Link className="text-white text-decoration-none" to="#">Our Services</Link></p>
+            <p><Link className="text-white text-decoration-none" to="#">Privacy Policy</Link></p>
+            <p><Link className="text-white text-decoration-none" to="#">Terms & Condition</Link></p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="col-md-3 col-lg-3 col-xl-3 mb-4">
+            <h5 className="text-uppercase mb-4 font-weight-bold text-white">Quick Links</h5>
+            <p><Link className="text-white text-decoration-none" to="/">Home</Link></p>
+            <p><Link className="text-white text-decoration-none" to="/job-options">Jobs</Link></p>
+            <p><Link className="text-white text-decoration-none" to="/scholarship-options">Scholarships</Link></p>
+            <p><Link className="text-white text-decoration-none" to="/lost-and-found-options">Lost & Found</Link></p>
+          </div>
+
+          {/* Contact */}
+          <div className="col-md-3 col-lg-3 col-xl-3 mb-4">
+            <h5 className="text-uppercase mb-4 font-weight-bold text-white">Contact</h5>
+            <p>
+    <FaMapMarkerAlt className="me-2" />
+    Main Jaranwala Road, Faisalabad
+  </p>
+  <p>
+    <FaPhoneAlt className="me-2" />
+    +92 336 6190190
+  </p>
+  <p>
+    <FaEnvelope className="me-2" />
+    moizayub@gmail.com
+  </p>
+            <div className="d-flex gap-3 mt-3">
+              <a href="#"><FaTwitter className="text-white" /></a>
+              <a href="#"><FaFacebookF className="text-white" /></a>
+              <a href="#"><FaYoutube className="text-white" /></a>
+              <a href="#"><FaLinkedinIn className="text-white" /></a>
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div className="col-md-3 col-lg-3 col-xl-3 mb-4 ">
+            <h5 className="text-uppercase mb-4 font-weight-bold text-white">Newsletter</h5>
+            <p>Subscribe to our newsletter to get our latest notifications</p>
+            <div className="input-group">
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Enter Email"
+              />
+              <button className="btn btn-success">SignUp</button>
+            </div>
+          </div>
         </div>
 
-        {/* Middle Section */}
-        <div className="col-12 col-md-4 mb-4">
-          <h5>Quick Links</h5>
-          <ul className="list-unstyled">
-            <li>
-              <Link to="/" className="text-decoration-none text-dark">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className="text-decoration-none text-dark">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="text-decoration-none text-dark">
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/job-options"
-                className="text-decoration-none text-dark"
-              >
-                Jobs
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/scholarship-options"
-                className="text-decoration-none text-dark"
-              >
-                Scholarships
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/lost-and-found-options"
-                className="text-decoration-none text-dark"
-              >
-                Lost and Found
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Right Section */}
-        <div className="col-12 col-md-4 mb-4">
-          <h5>Contact Us</h5>
-          <p>
-            <strong>Address:</strong> Faisalabad
-          </p>
-          <p>
-            <strong>Email:</strong> moizayub401@gmail.com
-          </p>
-          <p>
-            <strong>Phone:</strong> +92 366190190
-          </p>
-          {/* <p><strong>Follow us:</strong> </p> */}
+        <hr className="mb-4" />
+        <div className="row">
+          <div className="col-md-8">
+            <p>
+              © <Link to="/" className="text-success text-decoration-none">talaash</Link>, All Right Reserved.
+              Designed By <span className="text-success">Moiz and co.</span>
+            </p>
+          </div>
+          <div className="col-md-4 d-flex justify-content-md-end gap-4">
+            <Link to="/" className="text-white text-decoration-none">Home</Link>
+            <Link to="#" className="text-white text-decoration-none">Cookies</Link>
+            <Link to="#" className="text-white text-decoration-none">Help</Link>
+            <Link to="#" className="text-white text-decoration-none">FAQs</Link>
+          </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

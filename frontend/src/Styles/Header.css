@@ -1,0 +1,5 @@
+.nav-link.active {
+  text-decoration: underline;
+  font-weight: 800;
+  color: #28a745 !important; 
+}
