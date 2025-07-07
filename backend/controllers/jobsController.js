@@ -16,6 +16,7 @@ export const createJobController = async (req, res, next) => {
       posterEmail,
       workLocation,
       createdBy,
+      // phone,
     } = req.body;
 
     const jobData = {
@@ -28,6 +29,7 @@ export const createJobController = async (req, res, next) => {
       posterEmail: posterEmail,
       workLocation,
       createdBy: createdBy || "anonymous",
+      // phone,
     };
 
     const job = await jobsModel.create(jobData);

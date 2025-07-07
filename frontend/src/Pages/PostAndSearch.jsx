@@ -4,6 +4,8 @@ import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
 import "../Styles/Options.css";
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase.js";
+
 
 const PostAndSearch = () => {
   const [formData, setFormData] = useState({
@@ -14,9 +16,56 @@ const PostAndSearch = () => {
     salary: "",
     workType: "",
     posterEmail: "",
+
+    // phone: "",
   });
 
   const navigate = useNavigate();
+//   const [otp, setOtp] = useState("");
+// const [isVerified, setIsVerified] = useState(false);
+
+// const sendOTP = () => {
+//   if (!formData.phone.startsWith("+")) {
+//     return toast.error("Phone number must start with country code like +92");
+//   }
+
+//   // Check and only create recaptcha once
+//   if (!window.recaptchaVerifier) {
+//     window.recaptchaVerifier = new RecaptchaVerifier(
+//       "recaptcha-container",
+//       {
+//         size: "invisible",
+//         callback: (response) => {
+//           // reCAPTCHA solved
+//         },
+//       },
+//       auth
+//     );
+//   }
+
+//   signInWithPhoneNumber(auth, formData.phone, window.recaptchaVerifier)
+//     .then((confirmationResult) => {
+//       window.confirmationResult = confirmationResult;
+//       toast.success("OTP sent successfully");
+//     })
+//     .catch((error) => {
+//       console.error("OTP error:", error);
+//       toast.error("Failed to send OTP");
+//     });
+// };
+
+// const verifyOTP = () => {
+//   window.confirmationResult
+//     .confirm(otp)
+//     .then((result) => {
+//       toast.success("Phone number verified ✔");
+//       setIsVerified(true);
+//     })
+//     .catch((error) => {
+//       toast.error("Invalid OTP ❌");
+//     });
+// };
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,6 +86,10 @@ const PostAndSearch = () => {
       toast.error("Please fill all required fields.");
       return;
     }
+
+  //   if (!isVerified) {
+  //   return toast.error("Please verify phone number before posting.");
+  // }
 
     try {
       const data = {
@@ -153,6 +206,64 @@ const PostAndSearch = () => {
                   className="form-control mb-2"
                   required
                 />
+
+ {/* <input
+  type="text"
+  name="phone"
+  placeholder="Phone Number (e.g. +92xxxxxxxxxx)"
+  value={formData.phone}
+  onChange={handleChange}
+  className="form-control mb-2"
+  required
+/>
+
+{isVerified && (
+  <div className="text-success mb-2">
+    <strong>✔ Phone Verified</strong>
+  </div>
+)}
+
+
+<div className="d-flex gap-2 mb-2">
+  <button
+    type="button"
+    className="btn btn-warning w-50"
+    onClick={sendOTP}
+    disabled={!formData.phone}
+  >
+    Send OTP
+  </button>
+  {window.confirmationResult && (
+    <button
+      type="button"
+      className="btn btn-success w-50"
+      onClick={() => {
+        document.getElementById("otp-section").style.display = "block";
+      }}
+    >
+      Enter OTP
+    </button>
+  )}
+</div>
+
+{/* 🔐 OTP Input - initially hidden */}
+
+{/* <div id="otp-section" style={{ display: "none" }}>
+  <input
+    type="text"
+    placeholder="Enter OTP"
+    value={otp}
+    onChange={(e) => setOtp(e.target.value)}
+    className="form-control mb-2"
+  />
+  <button type="button" className="btn btn-primary mb-3" onClick={verifyOTP}>
+    Verify OTP
+  </button>
+</div>
+
+<div id="recaptcha-container"></div> * */}
+
+
                 <input
                   type="text"
                   name="workLocation"
@@ -220,7 +331,7 @@ const PostAndSearch = () => {
           </div>
         </div>
       </div>
-      </>
+    </>
   );
 };
 

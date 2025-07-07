@@ -11,6 +11,11 @@ const jobSchema = new mongoose.Schema(
       required: [true, "Job Position is required"],
       maxlength: 100,
     },
+    // phone: {
+    //   type: String,
+    //   required: [true, "Phone number is required"],
+    // },
+
     status: {
       type: String,
       enum: ["pending", "reject", "interview"],
@@ -29,8 +34,8 @@ const jobSchema = new mongoose.Schema(
       required: [true, "Work location is required"],
     },
     createdBy: {
-    type: String, 
-  },
+      type: String,
+    },
     salary: {
       type: String,
       required: [true, "Salary is required"],

@@ -176,68 +176,117 @@ const Home = () => {
       </div>
 
       {/* Team or Features Images Section */}
-
-      {/* Meet the Team Section */}
       <div className="container py-5">
         <div className="text-center mb-5">
           <h2 className="fw-bold">Meet the Team</h2>
           <p className="text-muted">Creative minds powering Talaash</p>
         </div>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center text-center">
           {/* Team Member 1 */}
           <div className="col-md-4 mb-4">
-            <div className="card border-0 shadow-lg text-center p-4 h-100 rounded-4 bg-white">
+            <div className="card border-0 h-100 shadow">
               <div
-                className="position-relative mx-auto mb-3"
-                style={{ width: "150px", height: "150px" }}
+                className="mx-auto mt-4"
+                style={{
+                  width: "250px",
+                  height: "250px",
+                  overflow: "hidden",
+                  borderRadius: "50%",
+                }}
               >
                 <img
                   src="/moiz.jpg"
                   alt="Moiz"
-                  className="rounded-circle shadow"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  className="w-100 h-100"
+                  style={{ objectFit: "cover" }}
                 />
               </div>
-              <h5 className="fw-bold">Moiz</h5>
-              <p className="text-muted">Full Stack Magician 🧙‍♂️</p>
+              <div className="card-body">
+                <h5 className="fw-bold">Moiz</h5>
+                <p className="text-muted">Full Stack Magician 🧙‍♂️</p>
+                <p className="text-secondary fst-italic">
+                  Turning coffee into code and bugs into features. Backend,
+                  frontend — sab Moiz ke liye ek hi cheez hai.
+                </p>
+                <div className="d-flex justify-content-center gap-3 fs-5">
+                  <i className="bi bi-twitter-x"></i>
+                  <i className="bi bi-facebook"></i>
+                  <i className="bi bi-instagram"></i>
+                  <i className="bi bi-linkedin"></i>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Team Member 2 */}
           <div className="col-md-4 mb-4">
-            <div className="card border-0 shadow-lg text-center p-4 h-100 rounded-4 bg-white">
+            <div className="card border-0 h-100 shadow">
               <div
-                className="position-relative mx-auto mb-3"
-                style={{ width: "150px", height: "150px" }}
+                className="mx-auto mt-4"
+                style={{
+                  width: "250px",
+                  height: "250px",
+                  overflow: "hidden",
+                  borderRadius: "50%",
+                }}
               >
                 <img
                   src="/shoaib.jpeg"
                   alt="Shoaib"
-                  className="rounded-circle shadow"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  className="w-100 h-100"
+                  style={{ objectFit: "cover" }}
                 />
               </div>
-              <h5 className="fw-bold">Shoaib</h5>
-              <p className="text-muted">Frontend Ninja ⚡</p>
+              <div className="card-body">
+                <h5 className="fw-bold">Shoaib</h5>
+                <p className="text-muted">Frontend Ninja ⚡</p>
+                <p className="text-secondary fst-italic">
+                  Pixel-perfect precision aur buttery-smooth UI — Shoaib ka kaam
+                  dekhne ke baad Figma bhi pighal jata hai.
+                </p>
+                <div className="d-flex justify-content-center gap-3 fs-5">
+                  <i className="bi bi-twitter-x"></i>
+                  <i className="bi bi-facebook"></i>
+                  <i className="bi bi-instagram"></i>
+                  <i className="bi bi-linkedin"></i>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Team Member 3 */}
           <div className="col-md-4 mb-4">
-            <div className="card border-0 shadow-lg text-center p-4 h-100 rounded-4 bg-white">
+            <div className="card border-0 h-100 shadow">
               <div
-                className="position-relative mx-auto mb-3"
-                style={{ width: "150px", height: "150px" }}
+                className="mx-auto mt-4"
+                style={{
+                  width: "250px",
+                  height: "250px",
+                  overflow: "hidden",
+                  borderRadius: "50%",
+                }}
               >
                 <img
                   src="/muneeb.jpg"
                   alt="Muneeb"
-                  className="rounded-circle shadow"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  className="w-100 h-100"
+                  style={{ objectFit: "cover" }}
                 />
               </div>
-              <h5 className="fw-bold">Muneeb</h5>
-              <p className="text-muted">Backend Boss 👑</p>
+              <div className="card-body">
+                <h5 className="fw-bold">Muneeb</h5>
+                <p className="text-muted">Backend Boss 👑</p>
+                <p className="text-secondary fst-italic">
+                  Muneeb ne MongoDB se dosti aur APIs se pyar kar liya hai.
+                  Server down ho to pehle usse call karna!
+                </p>
+                <div className="d-flex justify-content-center gap-3 fs-5">
+                  <i className="bi bi-twitter-x"></i>
+                  <i className="bi bi-facebook"></i>
+                  <i className="bi bi-instagram"></i>
+                  <i className="bi bi-linkedin"></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
