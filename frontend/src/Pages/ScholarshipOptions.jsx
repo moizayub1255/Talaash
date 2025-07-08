@@ -102,7 +102,7 @@ const ScholarshipOptions = () => {
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-              className="btn btn-success btn-lg"
+              className="btn btn-success btn-lg px-4 btn-glow"
               data-bs-toggle="modal"
               data-bs-target="#scholarshipModal"
             >
@@ -110,7 +110,7 @@ const ScholarshipOptions = () => {
             </button>
             <button
               onClick={() => navigate("/scholarship")}
-              className="btn btn-primary btn-lg"
+              className="btn btn-outline-light btn-lg px-4 btn-glow"
             >
               Search Scholarships
             </button>

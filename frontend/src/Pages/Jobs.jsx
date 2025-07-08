@@ -3,6 +3,13 @@ import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import PostAndSearch from "./PostAndSearch";
+import {
+  FaMapMarkerAlt,
+  FaClock,
+  FaMoneyBill,
+  FaCalendarAlt,
+  FaHeart,
+} from "react-icons/fa";
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -10,11 +17,9 @@ const Jobs = () => {
   useEffect(() => {
     const getJobs = async () => {
       try {
-        
-          const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job`);
-
-        
-
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job`
+        );
         setJobs(res.data?.jobs || []);
       } catch (error) {
         console.error("Failed to fetch jobs", error);
@@ -22,14 +27,14 @@ const Jobs = () => {
       }
     };
 
-    getJobs(); 
+    getJobs();
   }, []);
 
   return (
     <Headandfoot>
-      <PostAndSearch/>
+      <PostAndSearch />
 
-      <div className="available-jobs py-5 px-3">
+      <div className="available-jobs py-5 px-3 container">
         <div className="text-center mb-4">
           <h1 className="fw-bold">Available Jobs</h1>
           <p className="text-muted">Explore the latest job openings</p>
@@ -37,46 +42,57 @@ const Jobs = () => {
 
         <div className="row g-4">
           {jobs.map((job) => (
-            <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={job._id}>
-              <Link
-                to={`/job-details/${job._id}`}
-                className="text-decoration-none text-dark"
-              >
-                <div className="card h-100 shadow-sm border-0 rounded-4">
+            <div className="col-12" key={job._id}>
+              <div className="card shadow-sm border rounded-4 p-3 d-flex flex-row align-items-center justify-content-between flex-wrap">
+                {/* Logo / Image */}
+                <div className="d-flex align-items-center gap-3 flex-wrap">
                   <img
                     src="/default.jpeg"
-                    alt="Job"
-                    className="card-img-top rounded-top-4"
-                    style={{ height: "180px", objectFit: "cover" }}
+                    alt="Company Logo"
+                    className="rounded-3 img-fluid"
+                    style={{
+                      width: "70px",
+                      height: "70px",
+                      objectFit: "cover",
+                    }}
                   />
-                  <div className="card-body">
-                    <h5 className="card-title">{job.position}</h5>
-                    <p className="card-text mb-1">
-                      <strong>Company:</strong> {job.company}
-                    </p>
-                    <p className="card-text mb-1">
-                      <strong>Location:</strong> {job.workLocation}
-                    </p>
-                    <p className="card-text mb-1">
-                      <strong>Type:</strong> {job.workType}
-                    </p>
-                    <p className="card-text mb-1">
-                      <strong>Salary:</strong> {job.salary}
+
+                  <div>
+                    <h5 className="fw-bold mb-1">{job.position}</h5>
+
+                    <p className="mb-1 text-muted">
+                      <strong>{job.company}</strong>
                     </p>
 
-                    <p className="card-text text-muted">
-                      {job.description?.length > 80
-                        ? job.description.slice(0, 80) + "..."
-                        : job.description}
-                    </p>
-                  </div>
-                  <div className="card-footer bg-white border-0 text-end">
-                    <button className="btn btn-primary btn-sm rounded-pill">
-                      View Details
-                    </button>
+                    <div className="d-flex flex-wrap gap-3 text-muted small">
+                      <span>
+                        <FaMapMarkerAlt className="me-1" /> {job.workLocation}
+                      </span>
+                      <span>
+                        <FaClock className="me-1" /> {job.workType}
+                      </span>
+                      <span>
+                        <FaMoneyBill className="me-1" /> {job.salary}
+                      </span>
+                      <span>
+                        <FaCalendarAlt className="me-1" /> Date Line: 01 Jan,
+                        2045
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </Link>
+
+                {/* Actions */}
+                <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
+                 
+
+                  <Link to={`/job-details/${job._id}`}>
+                    <button className="btn btn-success rounded-pill px-4 fw-semibold">
+                      Apply Now
+                    </button>
+                  </Link>
+                </div>
+              </div>
             </div>
           ))}
         </div>

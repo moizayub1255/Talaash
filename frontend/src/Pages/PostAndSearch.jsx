@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import "../Styles/Options.css";
 import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase.js";
 
-
 const PostAndSearch = () => {
   const [formData, setFormData] = useState({
     company: "",
@@ -21,51 +20,50 @@ const PostAndSearch = () => {
   });
 
   const navigate = useNavigate();
-//   const [otp, setOtp] = useState("");
-// const [isVerified, setIsVerified] = useState(false);
+  //   const [otp, setOtp] = useState("");
+  // const [isVerified, setIsVerified] = useState(false);
 
-// const sendOTP = () => {
-//   if (!formData.phone.startsWith("+")) {
-//     return toast.error("Phone number must start with country code like +92");
-//   }
+  // const sendOTP = () => {
+  //   if (!formData.phone.startsWith("+")) {
+  //     return toast.error("Phone number must start with country code like +92");
+  //   }
 
-//   // Check and only create recaptcha once
-//   if (!window.recaptchaVerifier) {
-//     window.recaptchaVerifier = new RecaptchaVerifier(
-//       "recaptcha-container",
-//       {
-//         size: "invisible",
-//         callback: (response) => {
-//           // reCAPTCHA solved
-//         },
-//       },
-//       auth
-//     );
-//   }
+  //   // Check and only create recaptcha once
+  //   if (!window.recaptchaVerifier) {
+  //     window.recaptchaVerifier = new RecaptchaVerifier(
+  //       "recaptcha-container",
+  //       {
+  //         size: "invisible",
+  //         callback: (response) => {
+  //           // reCAPTCHA solved
+  //         },
+  //       },
+  //       auth
+  //     );
+  //   }
 
-//   signInWithPhoneNumber(auth, formData.phone, window.recaptchaVerifier)
-//     .then((confirmationResult) => {
-//       window.confirmationResult = confirmationResult;
-//       toast.success("OTP sent successfully");
-//     })
-//     .catch((error) => {
-//       console.error("OTP error:", error);
-//       toast.error("Failed to send OTP");
-//     });
-// };
+  //   signInWithPhoneNumber(auth, formData.phone, window.recaptchaVerifier)
+  //     .then((confirmationResult) => {
+  //       window.confirmationResult = confirmationResult;
+  //       toast.success("OTP sent successfully");
+  //     })
+  //     .catch((error) => {
+  //       console.error("OTP error:", error);
+  //       toast.error("Failed to send OTP");
+  //     });
+  // };
 
-// const verifyOTP = () => {
-//   window.confirmationResult
-//     .confirm(otp)
-//     .then((result) => {
-//       toast.success("Phone number verified ✔");
-//       setIsVerified(true);
-//     })
-//     .catch((error) => {
-//       toast.error("Invalid OTP ❌");
-//     });
-// };
-
+  // const verifyOTP = () => {
+  //   window.confirmationResult
+  //     .confirm(otp)
+  //     .then((result) => {
+  //       toast.success("Phone number verified ✔");
+  //       setIsVerified(true);
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Invalid OTP ❌");
+  //     });
+  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -87,9 +85,9 @@ const PostAndSearch = () => {
       return;
     }
 
-  //   if (!isVerified) {
-  //   return toast.error("Please verify phone number before posting.");
-  // }
+    //   if (!isVerified) {
+    //   return toast.error("Please verify phone number before posting.");
+    // }
 
     try {
       const data = {
@@ -144,7 +142,7 @@ const PostAndSearch = () => {
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-              className="btn btn-success btn-lg"
+              className="btn btn-success btn-lg px-4 btn-glow"
               data-bs-toggle="modal"
               data-bs-target="#postJobModal"
             >
@@ -152,7 +150,7 @@ const PostAndSearch = () => {
             </button>
             <button
               onClick={() => navigate("/jobs")}
-              className="btn btn-primary btn-lg"
+              className="btn btn-outline-light btn-lg px-4 btn-glow"
             >
               Search A Job
             </button>
@@ -207,7 +205,7 @@ const PostAndSearch = () => {
                   required
                 />
 
- {/* <input
+                {/* <input
   type="text"
   name="phone"
   placeholder="Phone Number (e.g. +92xxxxxxxxxx)"
@@ -248,7 +246,7 @@ const PostAndSearch = () => {
 
 {/* 🔐 OTP Input - initially hidden */}
 
-{/* <div id="otp-section" style={{ display: "none" }}>
+                {/* <div id="otp-section" style={{ display: "none" }}>
   <input
     type="text"
     placeholder="Enter OTP"
@@ -262,7 +260,6 @@ const PostAndSearch = () => {
 </div>
 
 <div id="recaptcha-container"></div> * */}
-
 
                 <input
                   type="text"
