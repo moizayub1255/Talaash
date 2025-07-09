@@ -2,3 +2,7 @@ footer a:hover {
   color: #6ee7b7;
   text-decoration: underline;
 }
+
+.color{
+  color: rgba(25, 135, 84, 1);
+}
