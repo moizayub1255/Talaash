@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
+import { useUser } from "@clerk/clerk-react";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
+  const { isSignedIn } = useUser();
   const [scholarship, setScholarship] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [applicant, setApplicant] = useState({
@@ -46,9 +48,8 @@ const ScholarshipDetails = () => {
         await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/apply/${id}`,
           {
-
             ...applicant,
-            cvFile: base64CV, 
+            cvFile: base64CV,
           },
           {
             headers: {
@@ -64,7 +65,7 @@ const ScholarshipDetails = () => {
       }
     };
 
-    reader.readAsDataURL(applicant.cvFile); 
+    reader.readAsDataURL(applicant.cvFile);
   };
 
   if (!scholarship) return <p className="text-center mt-5">Loading...</p>;
@@ -95,7 +96,7 @@ const ScholarshipDetails = () => {
                 <p className="card-text mb-2">
                   <strong>Scholarship Category:</strong> {scholarship.category}
                 </p>
-                
+
                 <p className="card-text mb-4">
                   <strong>Description:</strong>
                   <br />
@@ -108,8 +109,16 @@ const ScholarshipDetails = () => {
               </div>
               <div className="card-footer bg-white text-end">
                 <button
-                  className="btn btn-primary my-3"
-                  onClick={() => setShowModal(true)}
+                  className="btn btn-success my-3"
+                  onClick={() => {
+                    if (!isSignedIn) {
+                      toast.error(
+                        "Please login to apply for this scholarship."
+                      );
+                      return;
+                    }
+                    setShowModal(true);
+                  }}
                 >
                   Apply Now
                 </button>
@@ -212,7 +221,7 @@ const ScholarshipDetails = () => {
 
                             <div className="mb-3">
                               <label className="form-label fw-semibold text-start d-block">
-                                Upload CV (PDF)
+                                Upload Past Result (PDF)
                               </label>
                               <input
                                 type="file"
@@ -237,7 +246,7 @@ const ScholarshipDetails = () => {
                             >
                               Cancel
                             </button>
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-success">
                               Submit
                             </button>
                           </div>

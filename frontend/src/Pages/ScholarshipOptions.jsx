@@ -4,6 +4,8 @@ import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
 import "../Styles/Options.css";
+import { useUser } from "@clerk/clerk-react";
+ 
 
 const ScholarshipOptions = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +21,8 @@ const ScholarshipOptions = () => {
   });
 
   const navigate = useNavigate();
+  const { isSignedIn } = useUser();
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,6 +57,11 @@ const ScholarshipOptions = () => {
       toast.error("Please fill all required fields.");
       return;
     }
+
+    if (!isSignedIn) {
+    toast.error("Please login to post a scholarship.");
+    return;
+  }
 
     try {
       await axios.post(
@@ -103,8 +112,15 @@ const ScholarshipOptions = () => {
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
               className="btn btn-success btn-lg px-4 btn-glow"
-              data-bs-toggle="modal"
-              data-bs-target="#scholarshipModal"
+              onClick={() => {
+                if (!isSignedIn) {
+                  toast.error("Login to Post the Scholarship");
+                  return;
+                }
+                const modal = new window.bootstrap.Modal(document.getElementById("scholarshipModal"));
+
+                modal.show();
+              }}
             >
               Post a Scholarship
             </button>

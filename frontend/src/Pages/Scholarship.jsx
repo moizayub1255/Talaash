@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 import ScholarshipOptions from "./ScholarshipOptions";
 import {
   FaCalendarAlt,
@@ -12,6 +15,8 @@ import {
 
 const Scholarship = () => {
   const [scholarship, setScholarship] = useState([]);
+  const navigate = useNavigate();
+  const { isSignedIn, user } = useUser();
 
   useEffect(() => {
     const getScholarship = async () => {
@@ -80,11 +85,18 @@ const Scholarship = () => {
 
                 {/* Action Button */}
                 <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
-                  <Link to={`/scholarship-details/${sch._id}`}>
-                    <button className="btn btn-success rounded-pill px-4 fw-semibold">
-                      View Details
+                    <button
+                      className="btn btn-success rounded-pill px-4 fw-semibold"
+                      onClick={() => {
+                        if (!isSignedIn) {
+                          toast.error("Login to apply for the scholarship");
+                          return;
+                        }
+                        navigate(`/scholarship-details/${sch._id}`);
+                      }}
+                    >
+                      Apply Now
                     </button>
-                  </Link>
                 </div>
               </div>
             </div>
