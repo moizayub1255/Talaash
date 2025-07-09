@@ -4,6 +4,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "../Styles/Options.css";
 
+import { useUser } from "@clerk/clerk-react";
+
 const LostOptions = () => {
   const [formData, setFormData] = useState({
     itemName: "",
@@ -20,6 +22,7 @@ const LostOptions = () => {
 
   const [previewImage, setPreviewImage] = useState(null);
   const navigate = useNavigate();
+  const { isSignedIn } = useUser();
 
   const handleChange = (e) => {
     if (e.target.name === "image") {
@@ -73,6 +76,11 @@ const LostOptions = () => {
         imageBase64: base64,
       };
 
+      if (!isSignedIn) {
+        toast.error("Please login to post a scholarship.");
+        return;
+      }
+
       try {
         await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
@@ -125,12 +133,24 @@ const LostOptions = () => {
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-              className="btn btn-success btn-lg px-4 btn-glow"
-              data-bs-toggle="modal"
-              data-bs-target="#lostItemModal"
-            >
-              Post An Item
-            </button>
+  className="btn btn-success btn-lg px-4 btn-glow"
+  onClick={(e) => {
+    e.preventDefault();
+
+    if (!isSignedIn) {
+      toast.error("Login to post the item");
+      return;
+    }
+
+    const modal = new window.bootstrap.Modal(
+      document.getElementById("lostItemModal")
+    );
+    modal.show();
+  }}
+>
+  Post An Item
+</button>
+
             <button
               onClick={() => navigate("/lost-and-found")}
               className="btn btn-outline-light btn-lg px-4 btn-glow"
