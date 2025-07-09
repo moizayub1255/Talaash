@@ -12,7 +12,7 @@
   "author": "TEchinfoyt",
   "license": "ISC",
   "dependencies": {
-    "@clerk/clerk-sdk-node": "^4.13.23",
+    "@clerk/clerk-sdk-node": "^5.1.6",
     "@clerk/express": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^2.2.0",
@@ -29,7 +29,7 @@
     "mongoose": "^7.0.2",
     "morgan": "^1.10.0",
     "nodemailer": "^7.0.3",
-    "nodemon": "^2.0.21",
+    "nodemon": "^3.1.10",
     "swagger-doc": "^0.3.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2",

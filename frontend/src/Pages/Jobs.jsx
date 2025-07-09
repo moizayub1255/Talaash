@@ -3,6 +3,10 @@ import Headandfoot from "./components/Headandfoot";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import PostAndSearch from "./PostAndSearch";
+import { useUser } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 import {
   FaMapMarkerAlt,
   FaClock,
@@ -13,6 +17,10 @@ import {
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
+  const { isSignedIn, user } = useUser();
+  const navigate = useNavigate();
+
+
 
   useEffect(() => {
     const getJobs = async () => {
@@ -86,11 +94,20 @@ const Jobs = () => {
                 <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
                  
 
-                  <Link to={`/job-details/${job._id}`}>
-                    <button className="btn btn-success rounded-pill px-4 fw-semibold">
-                      Apply Now
-                    </button>
-                  </Link>
+                  <button
+  className="btn btn-success rounded-pill px-4 fw-semibold"
+  onClick={() => {
+    if (!isSignedIn) {
+      toast.error("Login to apply for the job");
+      return;
+    }
+    navigate(`/job-details/${job._id}`);
+  }}
+>
+  Apply Now
+</button>
+
+
                 </div>
               </div>
             </div>

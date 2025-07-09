@@ -1,4 +1,6 @@
 import express from "express";
+import { requireAuth } from "../middelwares/clerkAuthMiddleware.js";
+
 import {
   applyJobController,
   createJobController,
@@ -13,7 +15,7 @@ const router = express.Router();
 
 //routes
 // CREATE JOB || POST
-router.post("/create-job", createJobController);
+router.post("/create-job",  requireAuth,createJobController);
 
 
 router.post("/apply/:id", applyJobController);

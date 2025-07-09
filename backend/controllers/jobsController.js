@@ -47,6 +47,13 @@ export const applyJobController = async (req, res) => {
   const { id } = req.params;
   const { name, email, phone, coverLetter, cvFile } = req.body;
 
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+
   const job = await jobsModel.findById(id);
 
   if (!job.posterEmail) {

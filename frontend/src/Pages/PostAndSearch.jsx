@@ -4,7 +4,7 @@ import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
 import "../Styles/Options.css";
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase.js";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 const PostAndSearch = () => {
   const [formData, setFormData] = useState({
@@ -15,55 +15,11 @@ const PostAndSearch = () => {
     salary: "",
     workType: "",
     posterEmail: "",
-
-    // phone: "",
   });
 
   const navigate = useNavigate();
-  //   const [otp, setOtp] = useState("");
-  // const [isVerified, setIsVerified] = useState(false);
-
-  // const sendOTP = () => {
-  //   if (!formData.phone.startsWith("+")) {
-  //     return toast.error("Phone number must start with country code like +92");
-  //   }
-
-  //   // Check and only create recaptcha once
-  //   if (!window.recaptchaVerifier) {
-  //     window.recaptchaVerifier = new RecaptchaVerifier(
-  //       "recaptcha-container",
-  //       {
-  //         size: "invisible",
-  //         callback: (response) => {
-  //           // reCAPTCHA solved
-  //         },
-  //       },
-  //       auth
-  //     );
-  //   }
-
-  //   signInWithPhoneNumber(auth, formData.phone, window.recaptchaVerifier)
-  //     .then((confirmationResult) => {
-  //       window.confirmationResult = confirmationResult;
-  //       toast.success("OTP sent successfully");
-  //     })
-  //     .catch((error) => {
-  //       console.error("OTP error:", error);
-  //       toast.error("Failed to send OTP");
-  //     });
-  // };
-
-  // const verifyOTP = () => {
-  //   window.confirmationResult
-  //     .confirm(otp)
-  //     .then((result) => {
-  //       toast.success("Phone number verified ✔");
-  //       setIsVerified(true);
-  //     })
-  //     .catch((error) => {
-  //       toast.error("Invalid OTP ❌");
-  //     });
-  // };
+  const { getToken } = useAuth();
+  const { isSignedIn } = useUser();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -72,6 +28,13 @@ const PostAndSearch = () => {
   const handlePostJob = async (e) => {
     e.preventDefault();
 
+    // Check login
+    if (!isSignedIn) {
+      toast.error("Login zaroori hai bhai, job post karne ke liye.");
+      return;
+    }
+
+    // Form validation
     if (
       !formData.posterEmail ||
       !formData.company ||
@@ -85,11 +48,9 @@ const PostAndSearch = () => {
       return;
     }
 
-    //   if (!isVerified) {
-    //   return toast.error("Please verify phone number before posting.");
-    // }
-
     try {
+      const token = await getToken();
+
       const data = {
         ...formData,
         workType: formData.workType || "full-time",
@@ -97,10 +58,16 @@ const PostAndSearch = () => {
 
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/create-job`,
-        data
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      toast.success("Job posted!");
+      toast.success("Job posted successfully!");
+
       // Reset form
       setFormData({
         company: "",
@@ -111,6 +78,7 @@ const PostAndSearch = () => {
         workType: "",
         posterEmail: "",
       });
+
       // Close modal
       const modalEl = document.getElementById("postJobModal");
       const modal = window.bootstrap.Modal.getInstance(modalEl);
@@ -128,9 +96,7 @@ const PostAndSearch = () => {
         <video className="hero-bg-video" autoPlay muted loop playsInline>
           <source src="/job.mp4" type="video/mp4" />
         </video>
-
         <div className="hero-overlay" />
-
         <div className="hero-content container text-center">
           <h1 className="display-4 fw-bold text-white">
             Find The Best Startup <br /> Job That Fits You
@@ -142,12 +108,19 @@ const PostAndSearch = () => {
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-              className="btn btn-success btn-lg px-4 btn-glow"
-              data-bs-toggle="modal"
-              data-bs-target="#postJobModal"
-            >
-              Post A Job
-            </button>
+  className="btn btn-success btn-lg px-4 btn-glow"
+  onClick={() => {
+    if (!isSignedIn) {
+      toast.error("Login to Post the Job");
+      return;
+    }
+    const modal = new window.bootstrap.Modal(document.getElementById("postJobModal"));
+    modal.show();
+  }}
+>
+  Post A Job
+</button>
+
             <button
               onClick={() => navigate("/jobs")}
               className="btn btn-outline-light btn-lg px-4 btn-glow"
@@ -158,7 +131,7 @@ const PostAndSearch = () => {
         </div>
       </div>
 
-      {/* 📋 Modal Form */}
+      {/* 💼 Modal Form */}
       <div
         className="modal fade"
         id="postJobModal"
@@ -181,11 +154,7 @@ const PostAndSearch = () => {
             </div>
             <form onSubmit={handlePostJob}>
               <div className="modal-body">
-                <p className="text-muted text-center">
-                  <strong>Note:</strong> Once a job is posted, it cannot be
-                  deleted.
-                </p>
-
+                {/* Form Fields */}
                 <input
                   type="text"
                   name="position"
@@ -204,63 +173,6 @@ const PostAndSearch = () => {
                   className="form-control mb-2"
                   required
                 />
-
-                {/* <input
-  type="text"
-  name="phone"
-  placeholder="Phone Number (e.g. +92xxxxxxxxxx)"
-  value={formData.phone}
-  onChange={handleChange}
-  className="form-control mb-2"
-  required
-/>
-
-{isVerified && (
-  <div className="text-success mb-2">
-    <strong>✔ Phone Verified</strong>
-  </div>
-)}
-
-
-<div className="d-flex gap-2 mb-2">
-  <button
-    type="button"
-    className="btn btn-warning w-50"
-    onClick={sendOTP}
-    disabled={!formData.phone}
-  >
-    Send OTP
-  </button>
-  {window.confirmationResult && (
-    <button
-      type="button"
-      className="btn btn-success w-50"
-      onClick={() => {
-        document.getElementById("otp-section").style.display = "block";
-      }}
-    >
-      Enter OTP
-    </button>
-  )}
-</div>
-
-{/* 🔐 OTP Input - initially hidden */}
-
-                {/* <div id="otp-section" style={{ display: "none" }}>
-  <input
-    type="text"
-    placeholder="Enter OTP"
-    value={otp}
-    onChange={(e) => setOtp(e.target.value)}
-    className="form-control mb-2"
-  />
-  <button type="button" className="btn btn-primary mb-3" onClick={verifyOTP}>
-    Verify OTP
-  </button>
-</div>
-
-<div id="recaptcha-container"></div> * */}
-
                 <input
                   type="text"
                   name="workLocation"
@@ -287,7 +199,7 @@ const PostAndSearch = () => {
                 <input
                   type="text"
                   name="salary"
-                  placeholder="Salary (e.g. PKR 60,000/month)"
+                  placeholder="Salary"
                   value={formData.salary}
                   onChange={handleChange}
                   className="form-control mb-2"
@@ -296,7 +208,7 @@ const PostAndSearch = () => {
                 <input
                   type="email"
                   name="posterEmail"
-                  placeholder="Your Email (for applications)"
+                  placeholder="Your Email"
                   value={formData.posterEmail}
                   onChange={handleChange}
                   className="form-control mb-2"

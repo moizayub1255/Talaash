@@ -3,11 +3,14 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
+import { useUser } from "@clerk/clerk-react";
 
 const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const { isSignedIn, user } = useUser();
+
   const [applicant, setApplicant] = useState({
     name: "",
     email: "",
@@ -47,7 +50,7 @@ const JobDetails = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/apply/${id}`,
           {
             ...applicant,
-            cvFile: base64CV, 
+            cvFile: base64CV,
           },
           {
             headers: {
@@ -63,7 +66,7 @@ const JobDetails = () => {
       }
     };
 
-    reader.readAsDataURL(applicant.cvFile); 
+    reader.readAsDataURL(applicant.cvFile);
   };
 
   if (!job) return <p className="text-center mt-5">Loading...</p>;
@@ -109,8 +112,14 @@ const JobDetails = () => {
               </div>
               <div className="card-footer bg-white text-end">
                 <button
-                  className="btn btn-primary my-3"
-                  onClick={() => setShowModal(true)}
+                  className="btn btn-success my-3"
+                  onClick={() => {
+                    if (!isSignedIn) {
+                      toast.error("Please sign in to apply for jobs.");
+                      return;
+                    }
+                    setShowModal(true);
+                  }}
                 >
                   Apply Now
                 </button>
@@ -238,7 +247,7 @@ const JobDetails = () => {
                             >
                               Cancel
                             </button>
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-success">
                               Submit
                             </button>
                           </div>
