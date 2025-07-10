@@ -38,24 +38,30 @@
 
 ### Clone the Project
 
-```bash
+```sh
 git clone https://github.com/moizayub1255/Talaash.git
 cd Talaash
+```
 
 ### Frontend Setup
+```sh
 cd frontend
 npm install
 npm run dev
+```
 
 ###backend Setup
+```sh
 cd backend
 npm install
 npm run dev
+```
 
-Env for Backennd
+### .env for Backennd
+```sh
 PORT=5000
 MONGO_URL=""
-JWT_SECRET=BDHYDCYEUEIWWODJBHDCYEIHDJOWMXJBEHEIDOWKSQMNCBDQ
+JWT_SECRET=
 
 
 SMTP_HOST=
@@ -64,13 +70,17 @@ SMTP_USER=
 SMTP_PASS=
 SMTP_FROM=
 
-env for frontend
+```
+
+
+### .env for frontend
+```sh
 VITE_BACKEND_URL=
 
 VITE_CLERK_PUBLISHABLE_KEY=
+```
 
-
-📬 Contact
+###📬 Contact
 Have questions, feedback, or want to collaborate?
 
 📧 moizayub401@gmail.com
@@ -86,12 +96,7 @@ Stack Overflow 🧠
 
 And countless console.log() moments that saved the day 😅
 
-👨‍💻 Developed with ❤️ by Moiz Ayub
-yaml
-Copy
-Edit
-
----
+###👨‍💻 Developed with ❤️ by Moiz Ayub
 
 Let me know if you want to add:
 - Badges (build passing, license, etc.)
