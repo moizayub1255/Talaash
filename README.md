@@ -86,6 +86,7 @@ Have questions, feedback, or want to collaborate?
 📧 moizayub401@gmail.com
 🌐 GitHub Profile
 
+---
 
 ### 🙌 Special Thanks
 To:
@@ -95,6 +96,8 @@ Coffee ☕
 Stack Overflow 🧠
 
 And countless console.log() moments that saved the day 😅
+
+---
 
 ### 👨‍💻 Developed with ❤️ by Moiz Ayub
 
