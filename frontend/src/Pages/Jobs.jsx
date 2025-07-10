@@ -97,15 +97,12 @@ const Jobs = () => {
                   <button
   className="btn btn-success rounded-pill px-4 fw-semibold"
   onClick={() => {
-    if (!isSignedIn) {
-      toast.error("Login to apply for the job");
-      return;
-    }
     navigate(`/job-details/${job._id}`);
   }}
 >
   Apply Now
 </button>
+
 
 
                 </div>

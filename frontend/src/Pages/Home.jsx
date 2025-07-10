@@ -267,7 +267,7 @@ const Home = () => {
                 }}
               >
                 <img
-                  src="/muneeb.jpg"
+                  src="/muneeb.jpeg"
                   alt="Muneeb"
                   className="w-100 h-100"
                   style={{ objectFit: "cover" }}
