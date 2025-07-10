@@ -59,7 +59,7 @@ const ScholarshipOptions = () => {
     }
 
     if (!isSignedIn) {
-    toast.error("Please login to post a scholarship.");
+    toast.error("Login to post a scholarship.");
     return;
   }
 

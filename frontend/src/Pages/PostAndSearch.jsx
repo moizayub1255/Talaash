@@ -30,7 +30,7 @@ const PostAndSearch = () => {
 
     // Check login
     if (!isSignedIn) {
-      toast.error("Login zaroori hai bhai, job post karne ke liye.");
+      toast.error("Login to post the Job");
       return;
     }
 

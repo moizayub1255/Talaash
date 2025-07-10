@@ -115,7 +115,7 @@ const JobDetails = () => {
                   className="btn btn-success my-3"
                   onClick={() => {
                     if (!isSignedIn) {
-                      toast.error("Please sign in to apply for jobs.");
+                      toast.error("Login to apply for jobs.");
                       return;
                     }
                     setShowModal(true);

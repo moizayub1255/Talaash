@@ -113,7 +113,7 @@ const ScholarshipDetails = () => {
                   onClick={() => {
                     if (!isSignedIn) {
                       toast.error(
-                        "Please login to apply for this scholarship."
+                        "Login to apply for this scholarship."
                       );
                       return;
                     }

@@ -77,7 +77,7 @@ const LostOptions = () => {
       };
 
       if (!isSignedIn) {
-        toast.error("Please login to post a scholarship.");
+        toast.error("Login to post the item.");
         return;
       }
 
@@ -133,23 +133,23 @@ const LostOptions = () => {
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-  className="btn btn-success btn-lg px-4 btn-glow"
-  onClick={(e) => {
-    e.preventDefault();
+              className="btn btn-success btn-lg px-4 btn-glow"
+              onClick={(e) => {
+                e.preventDefault();
 
-    if (!isSignedIn) {
-      toast.error("Login to post the item");
-      return;
-    }
+                if (!isSignedIn) {
+                  toast.error("Login to post the item");
+                  return;
+                }
 
-    const modal = new window.bootstrap.Modal(
-      document.getElementById("lostItemModal")
-    );
-    modal.show();
-  }}
->
-  Post An Item
-</button>
+                const modal = new window.bootstrap.Modal(
+                  document.getElementById("lostItemModal")
+                );
+                modal.show();
+              }}
+            >
+              Post An Item
+            </button>
 
             <button
               onClick={() => navigate("/lost-and-found")}

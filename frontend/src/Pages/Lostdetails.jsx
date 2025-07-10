@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
+import { useUser } from "@clerk/clerk-react";
 
 const LostDetails = () => {
   const { id } = useParams();
   const [lost, setLost] = useState(null);
+  const { isSignedIn } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [applicant, setApplicant] = useState({
     name: "",
@@ -122,7 +124,7 @@ Please contact me as soon as possible. Thank you!
                       toast.error("Login to claim the item");
                       return;
                     }
-                    setShowModal(true); // Show modal if signed in
+                    setShowModal(true);
                   }}
                 >
                   Claim Item
