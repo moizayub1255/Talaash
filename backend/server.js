@@ -38,24 +38,13 @@ const __dirname = dirname(__filename);
 connectDB();
 
 // -------------------- CORS Config --------------------
-// ✅ Allow both local & deployed frontend
-const allowedOrigins = [
-  "http://localhost:5173",
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Preflight
+app.use(
+  cors({
+    origin: true, // ✅ Reflect request origin dynamically
+    credentials: true, // ✅ Support cookies/auth headers
+  })
+);
+app.options("*", cors()); // ✅ Preflight request handler
 
 // -------------------- Middlewares --------------------
 app.use(express.json({ limit: "10mb" }));
@@ -85,7 +74,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:5000", // ✅ dynamic URL
+        url: process.env.VERCEL_URL || "http://localhost:5000",
       },
     ],
   },
@@ -103,8 +92,5 @@ app.use("/api/auth", authRoutes);
 // -------------------- Error Handler --------------------
 app.use(errroMiddelware);
 
-// -------------------- Start Server --------------------
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Node Server Running on port no ${PORT}`.bgCyan.white);
-});
+// -------------------- EXPORT APP FOR VERCEL --------------------
+export default app;
