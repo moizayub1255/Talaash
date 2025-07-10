@@ -116,7 +116,7 @@ Please contact me as soon as possible. Thank you!
               </div>
               <div className="card-footer bg-white text-end">
                 <button
-                  className="btn btn-primary my-3"
+                  className="btn btn-success my-3"
                   onClick={() => setShowModal(true)}
                 >
                   Claim Item
@@ -216,7 +216,7 @@ Please contact me as soon as possible. Thank you!
                             >
                               Cancel
                             </button>
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-success">
                               Send on WhatsApp
                             </button>
                           </div>

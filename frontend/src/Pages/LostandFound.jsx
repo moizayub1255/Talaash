@@ -82,10 +82,10 @@ const LostandFound = () => {
                         toast.error("Login to claim the item");
                         return;
                       }
-                      navigate(`/lost-details/${lostItem._id}`);
+                      navigate(`/lost-and-found-details/${lostItem._id}`);
                     }}
                   >
-                    Apply Now
+                    Claim Item
                   </button>
                 </div>
               </div>

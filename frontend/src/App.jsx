@@ -23,7 +23,6 @@ import {
   SignedOut,
   ClerkLoaded,
 } from "@clerk/clerk-react";
-import { RedirectToUserProfile, useAuth } from "@clerk/clerk-react";
 import SaveClerkUser from "./Pages/SaveClerkUser";
 
 const App = () => {
