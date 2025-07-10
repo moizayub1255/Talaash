@@ -117,7 +117,13 @@ Please contact me as soon as possible. Thank you!
               <div className="card-footer bg-white text-end">
                 <button
                   className="btn btn-success my-3"
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {
+                    if (!isSignedIn) {
+                      toast.error("Login to claim the item");
+                      return;
+                    }
+                    setShowModal(true); // Show modal if signed in
+                  }}
                 >
                   Claim Item
                 </button>

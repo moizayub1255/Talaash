@@ -78,10 +78,7 @@ const LostandFound = () => {
                   <button
                     className="btn btn-success rounded-pill px-4 fw-semibold"
                     onClick={() => {
-                      if (!isSignedIn) {
-                        toast.error("Login to claim the item");
-                        return;
-                      }
+                      
                       navigate(`/lost-and-found-details/${lostItem._id}`);
                     }}
                   >
