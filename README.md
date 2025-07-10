@@ -50,7 +50,7 @@ npm install
 npm run dev
 ```
 
-###backend Setup
+### backend Setup
 ```sh
 cd backend
 npm install
@@ -80,14 +80,14 @@ VITE_BACKEND_URL=
 VITE_CLERK_PUBLISHABLE_KEY=
 ```
 
-###📬 Contact
+### 📬 Contact
 Have questions, feedback, or want to collaborate?
 
 📧 moizayub401@gmail.com
 🌐 GitHub Profile
 
 
-🙌 Special Thanks
+### 🙌 Special Thanks
 To:
 
 Coffee ☕
@@ -96,7 +96,7 @@ Stack Overflow 🧠
 
 And countless console.log() moments that saved the day 😅
 
-###👨‍💻 Developed with ❤️ by Moiz Ayub
+### 👨‍💻 Developed with ❤️ by Moiz Ayub
 
 Let me know if you want to add:
 - Badges (build passing, license, etc.)
