@@ -4,7 +4,9 @@ import fs from "fs";
 import path from "path";
 import LostModel from "../models/LostModel.js";
 // ====== CREATE JOB ======
-export const createLostController = async (req, res, next) => {
+// controllers/lostController.js
+
+export const createLostController = async (req, res) => {
   try {
     const {
       itemName,
@@ -15,20 +17,12 @@ export const createLostController = async (req, res, next) => {
       reporterName,
       reporterEmail,
       reporterPhone,
-      imageBase64,
       status,
     } = req.body;
 
-    let imageUrl = "";
-    if (imageBase64) {
-      const base64Data = imageBase64.split("base64,")[1];
-      const ext = imageBase64.match(/data:image\/(\w+);base64,/)[1];
-      const filename = `${Date.now()}.${ext}`;
-      const filepath = path.join("uploads", filename);
-      fs.writeFileSync(filepath, base64Data, "base64");
-      imageUrl = `/uploads/${filename}`;
-    }
-    const LostData = {
+    const imageUrl = req.file?.path; // ✅ Cloudinary image path
+
+    const lostItem = new LostModel({
       itemName,
       itemType,
       description,
@@ -37,18 +31,18 @@ export const createLostController = async (req, res, next) => {
       reporterName,
       reporterEmail,
       reporterPhone,
-      imageUrl,
-      status,
-    };
+      status: status || "pending",
+      imageUrl, // ✅ Store Cloudinary URL
+    });
 
-    const lost = await LostModel.create(LostData);
-
-    res.status(201).json({ lost });
+    await lostItem.save();
+    res.status(201).json({ success: true, lost: lostItem });
   } catch (error) {
-    console.log("Create Lost Error:", error);
-    res.status(500).json({ message: "Server Error" });
+    console.error("❌ Error creating lost item:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
 
 // ======= APPLY JOB ===========
 

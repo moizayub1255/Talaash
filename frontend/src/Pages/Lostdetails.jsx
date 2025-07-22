@@ -82,7 +82,7 @@ Please contact me as soon as possible. Thank you!
           <div className="col-md-10 col-lg-8">
             <div className="card shadow-lg rounded-4">
               <img
-                src={`${import.meta.env.VITE_BACKEND_URL}${lost.imageUrl}`}
+                src={lost.imageUrl}
                 alt="lost"
                 className="card-img-top rounded-top-4"
                 style={{ height: "300px", objectFit: "cover" }}

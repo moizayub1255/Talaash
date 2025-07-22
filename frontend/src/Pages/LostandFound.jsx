@@ -46,7 +46,7 @@ const LostandFound = () => {
                   className="text-decoration-none text-dark"
                 >
                   <img
-                    src={`${import.meta.env.VITE_BACKEND_URL}${lostItem.imageUrl}`}
+                    src={lostItem.imageUrl}
                     alt="Lost"
                     className="card-img-top rounded-top-4"
                     style={{ height: "180px", objectFit: "cover" }}

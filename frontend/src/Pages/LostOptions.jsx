@@ -24,6 +24,8 @@ const LostOptions = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
 
+  
+
   const handleChange = (e) => {
     if (e.target.name === "image") {
       const file = e.target.files[0];
@@ -39,81 +41,89 @@ const LostOptions = () => {
     }
   };
 
+ 
+
   const handlePostLost = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const {
-      itemName,
-      itemType,
-      location,
-      description,
-      reporterName,
-      reporterEmail,
-      reporterPhone,
-      image,
-    } = formData;
+  const {
+    itemName,
+    itemType,
+    location,
+    description,
+    reporterName,
+    reporterEmail,
+    reporterPhone,
+    date,
+    image,
+  } = formData;
 
-    if (
-      !itemName ||
-      !itemType ||
-      !location ||
-      !description ||
-      !reporterName ||
-      !reporterEmail ||
-      !reporterPhone ||
-      !image
-    ) {
-      toast.error("Please fill all required fields.");
-      return;
-    }
+  if (
+    !itemName ||
+    !itemType ||
+    !location ||
+    !description ||
+    !reporterName ||
+    !reporterEmail ||
+    !reporterPhone ||
+    !image
+  ) {
+    toast.error("Please fill all required fields.");
+    return;
+  }
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64 = reader.result;
+  if (!isSignedIn) {
+    toast.error("Login to post the item.");
+    return;
+  }
 
-      const data = {
-        ...formData,
-        imageBase64: base64,
-      };
+  try {
+    const form = new FormData();
+    form.append("itemName", itemName);
+    form.append("itemType", itemType);
+    form.append("location", location);
+    form.append("description", description);
+    form.append("reporterName", reporterName);
+    form.append("reporterEmail", reporterEmail);
+    form.append("reporterPhone", reporterPhone);
+    form.append("date", date);
+    form.append("status", "pending");
+    form.append("image", image); 
 
-      if (!isSignedIn) {
-        toast.error("Login to post the item.");
-        return;
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
+      form,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }
+    );
 
-      try {
-        await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
-          data
-        );
+    toast.success("Item posted!");
+    setPreviewImage(null);
+    setFormData({
+      itemName: "",
+      itemType: "",
+      description: "",
+      location: "",
+      date: "",
+      reporterName: "",
+      reporterEmail: "",
+      reporterPhone: "",
+      image: null,
+      status: "pending",
+    });
 
-        toast.success("Item posted!");
-        setPreviewImage(null);
-        setFormData({
-          itemName: "",
-          itemType: "",
-          description: "",
-          location: "",
-          date: "",
-          reporterName: "",
-          reporterEmail: "",
-          reporterPhone: "",
-          image: null,
-          status: "pending",
-        });
+    const modalEl = document.getElementById("lostItemModal");
+    const modal = window.bootstrap.Modal.getInstance(modalEl);
+    modal.hide();
+  } catch (err) {
+    console.error("Error posting Lost:", err);
+    toast.error("Failed to post Lost item.");
+  }
+};
 
-        // Close modal
-        const modalEl = document.getElementById("lostItemModal");
-        const modal = window.bootstrap.Modal.getInstance(modalEl);
-        modal.hide();
-      } catch (err) {
-        console.error("Error posting Lost:", err);
-        toast.error("Failed to post Lost item.");
-      }
-    };
-
-    reader.readAsDataURL(image);
-  };
 
   return (
     <>

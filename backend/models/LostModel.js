@@ -33,7 +33,8 @@ const LostAndFoundSchema = new mongoose.Schema({
     type: String,
   },
   imageUrl: {
-    type: String, // image ka URL (optional)
+    type: String, // This will store Cloudinary image URL
+    required: true,
   },
   status: {
     type: String,
