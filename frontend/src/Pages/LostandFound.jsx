@@ -39,15 +39,18 @@ const LostandFound = () => {
 
         <div className="row g-4">
           {lost.map((lostItem) => (
-            <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={lostItem._id}>
+            <div
+              className="col-12 col-sm-6 col-md-4 col-lg-3"
+              key={lostItem._id}
+            >
               <div className="card h-100 shadow-sm border-0 rounded-4">
                 <Link
                   to={`/lost-and-found-details/${lostItem._id}`}
                   className="text-decoration-none text-dark"
                 >
                   <img
-                    src={lostItem.imageUrl}
-                    alt="Lost"
+                    src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost-photo/${lostItem._id}`}
+                    alt={lostItem.itemName}
                     className="card-img-top rounded-top-4"
                     style={{ height: "180px", objectFit: "cover" }}
                   />
@@ -78,7 +81,6 @@ const LostandFound = () => {
                   <button
                     className="btn btn-success rounded-pill px-4 fw-semibold"
                     onClick={() => {
-                      
                       navigate(`/lost-and-found-details/${lostItem._id}`);
                     }}
                   >

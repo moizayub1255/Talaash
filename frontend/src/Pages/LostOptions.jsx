@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "../Styles/Options.css";
-
 import { useUser } from "@clerk/clerk-react";
 
 const LostOptions = () => {
@@ -19,6 +18,37 @@ const LostOptions = () => {
     image: null,
     status: "pending",
   });
+
+  const convertToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+const handleUpload = async (e) => {
+  const file = e.target.files[0];
+  const base64 = await convertToBase64(file);
+
+  const response = await fetch('/api/upload', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: 'Product 1',
+      image: {
+        data: base64,
+        contentType: file.type, // e.g., 'image/png'
+      },
+    }),
+  });
+
+  const result = await response.json();
+  console.log(result);
+};
 
   const [previewImage, setPreviewImage] = useState(null);
   const navigate = useNavigate();

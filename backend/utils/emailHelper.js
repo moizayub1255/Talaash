@@ -15,6 +15,6 @@ export const sendEmail = async (to, subject, text, attachments = []) => {
     to,
     subject,
     text,
-    attachments, // ✅ Send CV
+    attachments,
   });
 };

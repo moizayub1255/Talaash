@@ -1,10 +1,6 @@
-import swaggerUi from "swagger-ui-express";
-import swaggerDoc from "swagger-jsdoc";
-
 import express from "express";
 import "express-async-errors";
 import dotenv from "dotenv";
-import colors from "colors";
 import cors from "cors";
 import morgan from "morgan";
 
@@ -21,7 +17,6 @@ import authRoutes from "./routes/authRoutes.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import path from "path";
 
 dotenv.config();
 const app = express();
@@ -30,13 +25,11 @@ const __dirname = dirname(__filename);
 
 connectDB();
 
-app.use(
-  cors({
-    origin: true, 
-    credentials: true, 
-  })
-);
-app.options("*", cors()); 
+app.use(cors({
+  origin: 'http://localhost:5173', // ya jo bhi frontend ka origin ho
+  credentials: true,
+}));
+app.options("*", cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
@@ -45,38 +38,16 @@ app.use(xss());
 app.use(mongoSanitize());
 app.use(morgan("dev"));
 
-// app.use(
-//   "/uploads",
-//   (req, res, next) => {
-//     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-//     next();
-//   },
-//   express.static(path.join(__dirname, "uploads"))
-// );
-
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Talaash Job Portal API",
-      description: "Backend APIs for Talaash Application",
-    },
-    servers: [
-      {
-        url: process.env.VERCEL_URL || "http://localhost:5000",
-      },
-    ],
-  },
-  apis: ["./routes/*.js"],
-};
-const swaggerSpec = swaggerDoc(swaggerOptions);
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 app.use("/api/v1/job", jobsRoutes);
 app.use("/api/v1/scholarship", ScholarshipRoutes);
 app.use("/api/v1/lost", LostRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use(errroMiddelware);
+
+//console port
+app.listen(process.env.PORT || 5050, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
 
 export default app;

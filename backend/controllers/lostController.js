@@ -20,7 +20,10 @@ export const createLostController = async (req, res) => {
       status,
     } = req.body;
 
-    const imageUrl = req.file?.path; // ✅ Cloudinary image path
+    // Validate required fields
+    if (!itemName || !itemType || !description || !location || !reporterName || !reporterEmail || !reporterPhone) {
+      return res.status(400).json({ success: false, message: "Missing required fields" });
+    }
 
     const lostItem = new LostModel({
       itemName,
@@ -32,14 +35,41 @@ export const createLostController = async (req, res) => {
       reporterEmail,
       reporterPhone,
       status: status || "pending",
-      imageUrl, // ✅ Store Cloudinary URL
+      image: req.file
+        ? {
+            data: req.file.buffer,
+            contentType: req.file.mimetype,
+          }
+        : undefined,
     });
 
     await lostItem.save();
-    res.status(201).json({ success: true, lost: lostItem });
+
+    res.status(201).json({ success: true, message: "Lost item posted successfully", lostItem });
+
   } catch (error) {
     console.error("❌ Error creating lost item:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: error.message || "Internal server error" });
+  }
+};
+
+
+export const LostPhotoController = async (req, res) => {
+  try {
+    const lost = await LostModel.findById(req.params.pid).select("image");
+    if (lost && lost.image && lost.image.data) {
+      res.set("Content-type", lost.image.contentType);
+      return res.status(200).send(lost.image.data);
+    } else {
+      return res.status(404).send("Image not found");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while getting photo",
+      error,
+    });
   }
 };
 

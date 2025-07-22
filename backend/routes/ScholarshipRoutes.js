@@ -1,5 +1,4 @@
 import express from "express";
-import { requireAuth } from "../middelwares/clerkAuthMiddleware.js";
 import {
   applyScholarshipController,
   createScholarshipController,
@@ -11,9 +10,11 @@ const router = express.Router();
 
 //routes
 // CREATE JOB || POST
-router.post("/create-scholarship", requireAuth,createScholarshipController);
+router.post("/create-scholarship",createScholarshipController);
+// router.post("/create-scholarship", requireAuth,createScholarshipController);
 
-router.post("/apply/:id", requireAuth,applyScholarshipController);
+router.post("/apply/:id",applyScholarshipController);
+// router.post("/apply/:id", requireAuth,applyScholarshipController);
 
 //GET JOBS || GET
 router.get("/get-scholarship", getAllScholarshipController);

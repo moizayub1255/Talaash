@@ -1,7 +1,5 @@
 
-import mongoose from "mongoose";
-import moment from "moment";
-import nodemailer from "nodemailer";
+
 import { sendEmail } from "../utils/emailHelper.js";
 import ScholarshipModel from "../models/ScholarshipModel.js";
 // ====== CREATE JOB ======
@@ -89,7 +87,7 @@ ${coverLetter}
   res.status(200).json({ message: "Application submitted successfully" });
 };
 
-// ======= GET JOBS ===========
+
 export const getAllScholarshipController = async (req, res, next) => {
   const { status, category, search, sort } = req.query;
 

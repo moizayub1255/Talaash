@@ -55,6 +55,7 @@ const JobDetails = () => {
           {
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // Clerk token yahan
             },
           }
         );
