@@ -10,6 +10,7 @@ import Loader from "./components/Loader";
 const LostandFound = () => {
   const lostSectionRef = React.useRef(null);
   const [lost, setLosts] = useState([]);
+  const [imageUrls, setImageUrls] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
@@ -20,7 +21,27 @@ const LostandFound = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/get-lost`
         );
-        setLosts(res.data?.losts || []);
+        const lostItems = res.data?.losts || [];
+        setLosts(lostItems);
+
+        // Fetch images as blobs and convert to data URLs
+        const urls = {};
+        await Promise.all(
+          lostItems.map(async (item) => {
+            try {
+              const imgRes = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost-photo/${item._id}`
+              );
+              if (imgRes.ok) {
+                const blob = await imgRes.blob();
+                urls[item._id] = URL.createObjectURL(blob);
+              }
+            } catch (err) {
+              // Ignore image fetch errors
+            }
+          })
+        );
+        setImageUrls(urls);
       } catch (error) {
         console.error("Failed to fetch losts", error);
         setLosts([]);
@@ -30,7 +51,7 @@ const LostandFound = () => {
     getLosts();
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     // 2 second delay
     const timer = setTimeout(() => {
       setLoading(false);
@@ -42,7 +63,6 @@ const LostandFound = () => {
   if (loading) {
     return <Loader />;
   }
-
 
   const handleScrollToLosts = () => {
     if (lostSectionRef.current) {
@@ -72,7 +92,7 @@ const LostandFound = () => {
                   className="text-decoration-none text-dark"
                 >
                   <img
-                    src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost-photo/${lostItem._id}`}
+                    src={imageUrls[lostItem._id] || "/default.jpeg"}
                     alt={lostItem.itemName}
                     className="card-img-top rounded-top-4"
                     style={{ height: "180px", objectFit: "cover" }}

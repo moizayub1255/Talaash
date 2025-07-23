@@ -8,6 +8,7 @@ import { useUser } from "@clerk/clerk-react";
 const LostDetails = () => {
   const { id } = useParams();
   const [lost, setLost] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const { isSignedIn } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [applicant, setApplicant] = useState({
@@ -24,6 +25,20 @@ const LostDetails = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost/${id}`
         );
         setLost(res.data.lost);
+        // Fetch image as blob
+        try {
+          const imgRes = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost-photo/${id}`
+          );
+          if (imgRes.ok) {
+            const blob = await imgRes.blob();
+            setImageUrl(URL.createObjectURL(blob));
+          } else {
+            setImageUrl("/default.jpeg");
+          }
+        } catch {
+          setImageUrl("/default.jpeg");
+        }
       } catch (error) {
         console.error("Error fetching Lost details:", error);
       }
@@ -82,7 +97,7 @@ Please contact me as soon as possible. Thank you!
           <div className="col-md-10 col-lg-8">
             <div className="card shadow-lg rounded-4">
               <img
-                src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost-photo/${lost._id}`}
+                src={imageUrl || "/default.jpeg"}
                 alt={lost.itemName}
                 className="card-img-top rounded-top-4"
                 style={{ height: "300px", objectFit: "cover" }}

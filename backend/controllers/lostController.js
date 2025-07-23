@@ -84,7 +84,7 @@ export const createLostController = async (req, res) => {
 
 export const LostPhotoController = async (req, res) => {
   try {
-    const lost = await LostModel.findById(req.params.pid).select("image");
+    const lost = await LostModel.findById(req.params.id).select("image");
     if (lost && lost.image && lost.image.data) {
       res.setHeader("Content-Type", lost.image.contentType);
       res.setHeader("Access-Control-Allow-Origin", "*");

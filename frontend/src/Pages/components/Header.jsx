@@ -23,14 +23,14 @@ const Header = () => {
           className="navbar-brand fw-bold text-success fs-3 me-5 d-flex align-items-center"
           to="/"
         >
-          {/* <img
-            src="/logo.gif"
+          <img
+            src="/logo1.gif"
             alt="Logo"
             style={{
               height: "50px",
             }}
-          /> */}
-          <span className="d-none d-sm-block fw-bold fs-5 text-success">TALAASH</span>
+          />
+          {/* <span className="d-none d-sm-block fw-bold fs-5 text-success">TALAASH</span> */}
         </Link>
 
         <button
