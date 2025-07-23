@@ -6,18 +6,20 @@ import PostAndSearch from "./PostAndSearch";
 import { useUser } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Loader from "./components/Loader";
 
 import {
   FaMapMarkerAlt,
   FaClock,
   FaMoneyBill,
   FaCalendarAlt,
-  FaHeart,
 } from "react-icons/fa";
 
 const Jobs = () => {
+  const jobsSectionRef = React.useRef(null);
   const [jobs, setJobs] = useState([]);
   const { isSignedIn, user } = useUser();
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,8 +38,21 @@ const Jobs = () => {
     getJobs();
   }, []);
 
-  // Ref for available jobs section
-  const jobsSectionRef = React.useRef(null);
+  useEffect(() => {
+    // 2 second delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+
+  
 
   const handleScrollToJobs = () => {
     if (jobsSectionRef.current) {

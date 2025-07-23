@@ -19,8 +19,18 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
       <div className="container-fluid px-4">
-        <Link className="navbar-brand fw-bold  text-success fs-3 me-5" to="/">
-          TALAASH
+        <Link
+          className="navbar-brand fw-bold text-success fs-3 me-5 d-flex align-items-center"
+          to="/"
+        >
+          {/* <img
+            src="/logo.gif"
+            alt="Logo"
+            style={{
+              height: "50px",
+            }}
+          /> */}
+          <span className="d-none d-sm-block fw-bold fs-5 text-success">TALAASH</span>
         </Link>
 
         <button

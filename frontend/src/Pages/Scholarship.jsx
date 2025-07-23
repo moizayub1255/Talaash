@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import ScholarshipOptions from "./ScholarshipOptions";
+import Loader from "./components/Loader";
 import {
   FaCalendarAlt,
   FaBookOpen,
@@ -14,7 +15,9 @@ import {
 } from "react-icons/fa";
 
 const Scholarship = () => {
+  const scholarshipSectionRef = React.useRef(null);
   const [scholarship, setScholarship] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { isSignedIn, user } = useUser();
 
@@ -34,8 +37,19 @@ const Scholarship = () => {
     getScholarship();
   }, []);
 
-  // Ref for available scholarships section
-  const scholarshipSectionRef = React.useRef(null);
+  useEffect(() => {
+    // 2 second delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
 
   const handleScrollToScholarships = () => {
     if (scholarshipSectionRef.current) {

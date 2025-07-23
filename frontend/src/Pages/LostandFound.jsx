@@ -5,9 +5,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useUser } from "@clerk/clerk-react";
 import LostOptions from "./LostOptions";
+import Loader from "./components/Loader";
 
 const LostandFound = () => {
+  const lostSectionRef = React.useRef(null);
   const [lost, setLosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
 
@@ -27,8 +30,19 @@ const LostandFound = () => {
     getLosts();
   }, []);
 
-  // Ref for available losts section
-  const lostSectionRef = React.useRef(null);
+ useEffect(() => {
+    // 2 second delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
 
   const handleScrollToLosts = () => {
     if (lostSectionRef.current) {
