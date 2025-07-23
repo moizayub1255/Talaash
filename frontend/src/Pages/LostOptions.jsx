@@ -20,41 +20,39 @@ const LostOptions = () => {
   });
 
   const convertToBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-};
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
-const handleUpload = async (e) => {
-  const file = e.target.files[0];
-  const base64 = await convertToBase64(file);
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
 
-  const response = await fetch('/api/upload', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      name: 'Product 1',
-      image: {
-        data: base64,
-        contentType: file.type, // e.g., 'image/png'
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    }),
-  });
+      body: JSON.stringify({
+        name: "Product 1",
+        image: {
+          data: base64,
+          contentType: file.type, // e.g., 'image/png'
+        },
+      }),
+    });
 
-  const result = await response.json();
-  console.log(result);
-};
+    const result = await response.json();
+    console.log(result);
+  };
 
   const [previewImage, setPreviewImage] = useState(null);
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
-
-  
 
   const handleChange = (e) => {
     if (e.target.name === "photo") {
@@ -71,89 +69,86 @@ const handleUpload = async (e) => {
     }
   };
 
- 
-
   const handlePostLost = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const {
-    itemName,
-    itemType,
-    location,
-    description,
-    reporterName,
-    reporterEmail,
-    reporterPhone,
-    date,
-    photo,
-  } = formData;
+    const {
+      itemName,
+      itemType,
+      location,
+      description,
+      reporterName,
+      reporterEmail,
+      reporterPhone,
+      date,
+      photo,
+    } = formData;
 
-  if (
-    !itemName ||
-    !itemType ||
-    !location ||
-    !description ||
-    !reporterName ||
-    !reporterEmail ||
-    !reporterPhone ||
-    !photo
-  ) {
-    toast.error("Please fill all required fields.");
-    return;
-  }
+    if (
+      !itemName ||
+      !itemType ||
+      !location ||
+      !description ||
+      !reporterName ||
+      !reporterEmail ||
+      !reporterPhone ||
+      !photo
+    ) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
 
-  if (!isSignedIn) {
-    toast.error("Login to post the item.");
-    return;
-  }
+    if (!isSignedIn) {
+      toast.error("Login to post the item.");
+      return;
+    }
 
-  try {
-    const form = new FormData();
-    form.append("itemName", itemName);
-    form.append("itemType", itemType);
-    form.append("location", location);
-    form.append("description", description);
-    form.append("reporterName", reporterName);
-    form.append("reporterEmail", reporterEmail);
-    form.append("reporterPhone", reporterPhone);
-    form.append("date", date);
-    form.append("status", "pending");
-    form.append("photo", photo); 
+    try {
+      const form = new FormData();
+      form.append("itemName", itemName);
+      form.append("itemType", itemType);
+      form.append("location", location);
+      form.append("description", description);
+      form.append("reporterName", reporterName);
+      form.append("reporterEmail", reporterEmail);
+      form.append("reporterPhone", reporterPhone);
+      form.append("date", date);
+      form.append("status", "pending");
+      form.append("image", photo);
 
-    const res = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
-      form,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    toast.success("Item posted!");
-    setPreviewImage(null);
-    setFormData({
-      itemName: "",
-      itemType: "",
-      description: "",
-      location: "",
-      date: "",
-      reporterName: "",
-      reporterEmail: "",
-      reporterPhone: "",
-      photo: null,
-      status: "pending",
-    });
+      toast.success("Item posted!");
+      setPreviewImage(null);
+      setFormData({
+        itemName: "",
+        itemType: "",
+        description: "",
+        location: "",
+        date: "",
+        reporterName: "",
+        reporterEmail: "",
+        reporterPhone: "",
+        photo: null,
+        status: "pending",
+      });
 
-    const modalEl = document.getElementById("lostItemModal");
-    const modal = window.bootstrap.Modal.getInstance(modalEl);
-    modal.hide();
-  } catch (err) {
-    console.error("Error posting Lost:", err);
-    toast.error("Failed to post Lost item.");
-  }
-};
-
+      const modalEl = document.getElementById("lostItemModal");
+      const modal = window.bootstrap.Modal.getInstance(modalEl);
+      modal.hide();
+    } catch (err) {
+      console.error("Error posting Lost:", err);
+      toast.error("Failed to post Lost item.");
+    }
+  };
 
   return (
     <>

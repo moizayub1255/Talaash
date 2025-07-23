@@ -23,6 +23,6 @@ router.get("/get-lost", getAllLostController);
 
 router.get("/lost/:id", getSingleLostController);
 
-router.get("/lost-photo/:pid", cors(), LostPhotoController);
+router.get("/lost-photo/:id", cors(), LostPhotoController);
 
 export default router;
