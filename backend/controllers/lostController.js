@@ -21,8 +21,31 @@ export const createLostController = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!itemName || !itemType || !description || !location || !reporterName || !reporterEmail || !reporterPhone) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
+    if (
+      !itemName ||
+      !itemType ||
+      !description ||
+      !location ||
+      !reporterName ||
+      !reporterEmail ||
+      !reporterPhone
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
+    }
+
+    if (req.file) {
+      console.log(
+        "Image uploaded:",
+        req.file.originalname,
+        "size:",
+        req.file.size,
+        "type:",
+        req.file.mimetype
+      );
+    } else {
+      console.log("No image uploaded");
     }
 
     const lostItem = new LostModel({
@@ -45,21 +68,30 @@ export const createLostController = async (req, res) => {
 
     await lostItem.save();
 
-    res.status(201).json({ success: true, message: "Lost item posted successfully", lostItem });
-
+    res
+      .status(201)
+      .json({
+        success: true,
+        message: "Lost item posted successfully",
+        lostItem,
+      });
   } catch (error) {
     console.error("❌ Error creating lost item:", error);
-    res.status(500).json({ success: false, message: error.message || "Internal server error" });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
   }
 };
-
 
 export const LostPhotoController = async (req, res) => {
   try {
     const lost = await LostModel.findById(req.params.pid).select("image");
     if (lost && lost.image && lost.image.data) {
       res.set("Content-type", lost.image.contentType);
-      return res.status(200).send(lost.image.data);
+      return res.status(200).send(Buffer.from(lost.image.data));
     } else {
       return res.status(404).send("Image not found");
     }
@@ -72,7 +104,6 @@ export const LostPhotoController = async (req, res) => {
     });
   }
 };
-
 
 // ======= APPLY JOB ===========
 

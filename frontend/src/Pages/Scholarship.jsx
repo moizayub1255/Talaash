@@ -34,11 +34,23 @@ const Scholarship = () => {
     getScholarship();
   }, []);
 
+  // Ref for available scholarships section
+  const scholarshipSectionRef = React.useRef(null);
+
+  const handleScrollToScholarships = () => {
+    if (scholarshipSectionRef.current) {
+      scholarshipSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <Headandfoot>
-      <ScholarshipOptions />
+      <ScholarshipOptions onSearchScholarship={handleScrollToScholarships} />
 
-      <div className="available-jobs py-5 px-3 container">
+      <div
+        ref={scholarshipSectionRef}
+        className="available-jobs py-5 px-3 container"
+      >
         <div className="text-center mb-4">
           <h1 className="fw-bold">Available Scholarships</h1>
           <p className="text-muted">Explore the latest Scholarships</p>
@@ -75,7 +87,7 @@ const Scholarship = () => {
                       <span>
                         <FaMoneyBill className="me-1" /> {sch.amount}
                       </span>
-                      
+
                       <span>
                         <FaCalendarAlt className="me-1" /> {sch.deadline}
                       </span>
@@ -85,15 +97,14 @@ const Scholarship = () => {
 
                 {/* Action Button */}
                 <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
-                    <button
-                      className="btn btn-success rounded-pill px-4 fw-semibold"
-                      onClick={() => {
-                        
-                        navigate(`/scholarship-details/${sch._id}`);
-                      }}
-                    >
-                      Apply Now
-                    </button>
+                  <button
+                    className="btn btn-success rounded-pill px-4 fw-semibold"
+                    onClick={() => {
+                      navigate(`/scholarship-details/${sch._id}`);
+                    }}
+                  >
+                    Apply Now
+                  </button>
                 </div>
               </div>
             </div>

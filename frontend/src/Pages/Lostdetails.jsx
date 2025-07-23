@@ -82,8 +82,8 @@ Please contact me as soon as possible. Thank you!
           <div className="col-md-10 col-lg-8">
             <div className="card shadow-lg rounded-4">
               <img
-                src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost-photo/${lostItem._id}`}
-                alt={lostItem.itemName}
+                src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/lost-photo/${lost._id}`}
+                alt={lost.itemName}
                 className="card-img-top rounded-top-4"
                 style={{ height: "300px", objectFit: "cover" }}
               />
@@ -91,12 +91,6 @@ Please contact me as soon as possible. Thank you!
                 <h2 className="card-title mb-3">{lost.itemName}</h2>
                 <p className="card-text mb-2">
                   <strong>Item Type:</strong> {lost.itemType}
-                </p>
-                <p className="card-text mb-2">
-                  <strong>Location:</strong> {lost.location}
-                </p>
-                <p className="card-text mb-2">
-                  <strong>Reporter Name:</strong> {lost.reporterName}
                 </p>
                 <p className="card-text mb-2">
                   <strong>Reporter Phone:</strong> {lost.reporterPhone}

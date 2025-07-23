@@ -27,11 +27,20 @@ const LostandFound = () => {
     getLosts();
   }, []);
 
+  // Ref for available losts section
+  const lostSectionRef = React.useRef(null);
+
+  const handleScrollToLosts = () => {
+    if (lostSectionRef.current) {
+      lostSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <Headandfoot>
-      <LostOptions />
+      <LostOptions onSearchLost={handleScrollToLosts} />
 
-      <div className="available-losts py-5 px-3">
+      <div ref={lostSectionRef} className="available-losts py-5 px-3">
         <div className="text-center mb-4">
           <h1 className="fw-bold">Available Items</h1>
           <p className="text-muted">Explore the latest items openings</p>

@@ -15,7 +15,7 @@ const LostOptions = () => {
     reporterName: "",
     reporterEmail: "",
     reporterPhone: "",
-    image: null,
+    photo: null,
     status: "pending",
   });
 
@@ -57,9 +57,9 @@ const handleUpload = async (e) => {
   
 
   const handleChange = (e) => {
-    if (e.target.name === "image") {
+    if (e.target.name === "photo") {
       const file = e.target.files[0];
-      setFormData({ ...formData, image: file });
+      setFormData({ ...formData, photo: file });
 
       if (file) {
         const reader = new FileReader();
@@ -85,7 +85,7 @@ const handleUpload = async (e) => {
     reporterEmail,
     reporterPhone,
     date,
-    image,
+    photo,
   } = formData;
 
   if (
@@ -96,7 +96,7 @@ const handleUpload = async (e) => {
     !reporterName ||
     !reporterEmail ||
     !reporterPhone ||
-    !image
+    !photo
   ) {
     toast.error("Please fill all required fields.");
     return;
@@ -118,7 +118,7 @@ const handleUpload = async (e) => {
     form.append("reporterPhone", reporterPhone);
     form.append("date", date);
     form.append("status", "pending");
-    form.append("image", image); 
+    form.append("photo", photo); 
 
     const res = await axios.post(
       `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
@@ -141,7 +141,7 @@ const handleUpload = async (e) => {
       reporterName: "",
       reporterEmail: "",
       reporterPhone: "",
-      image: null,
+      photo: null,
       status: "pending",
     });
 
@@ -309,7 +309,7 @@ const handleUpload = async (e) => {
                 />
                 <input
                   type="file"
-                  name="image"
+                  name="photo"
                   accept="image/*"
                   onChange={handleChange}
                   className="form-control mb-2"

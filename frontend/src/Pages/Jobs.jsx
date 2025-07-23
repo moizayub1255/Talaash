@@ -20,8 +20,6 @@ const Jobs = () => {
   const { isSignedIn, user } = useUser();
   const navigate = useNavigate();
 
-
-
   useEffect(() => {
     const getJobs = async () => {
       try {
@@ -38,11 +36,20 @@ const Jobs = () => {
     getJobs();
   }, []);
 
+  // Ref for available jobs section
+  const jobsSectionRef = React.useRef(null);
+
+  const handleScrollToJobs = () => {
+    if (jobsSectionRef.current) {
+      jobsSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <Headandfoot>
-      <PostAndSearch />
+      <PostAndSearch onSearchJob={handleScrollToJobs} />
 
-      <div className="available-jobs py-5 px-3 container">
+      <div ref={jobsSectionRef} className="available-jobs py-5 px-3 container">
         <div className="text-center mb-4">
           <h1 className="fw-bold">Available Jobs</h1>
           <p className="text-muted">Explore the latest job openings</p>
@@ -92,19 +99,14 @@ const Jobs = () => {
 
                 {/* Actions */}
                 <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
-                 
-
                   <button
-  className="btn btn-success rounded-pill px-4 fw-semibold"
-  onClick={() => {
-    navigate(`/job-details/${job._id}`);
-  }}
->
-  Apply Now
-</button>
-
-
-
+                    className="btn btn-success rounded-pill px-4 fw-semibold"
+                    onClick={() => {
+                      navigate(`/job-details/${job._id}`);
+                    }}
+                  >
+                    Apply Now
+                  </button>
                 </div>
               </div>
             </div>

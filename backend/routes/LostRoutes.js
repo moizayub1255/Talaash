@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 
 import {
@@ -22,6 +23,6 @@ router.get("/get-lost", getAllLostController);
 
 router.get("/lost/:id", getSingleLostController);
 
-router.get("/lost-photo/:pid", LostPhotoController);
+router.get("/lost-photo/:pid", cors(), LostPhotoController);
 
 export default router;
