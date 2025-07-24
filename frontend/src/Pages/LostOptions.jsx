@@ -52,7 +52,7 @@ const LostOptions = () => {
 
   const [previewImage, setPreviewImage] = useState(null);
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
 
   const handleChange = (e) => {
     if (e.target.name === "photo") {
@@ -84,39 +84,22 @@ const LostOptions = () => {
       photo,
     } = formData;
 
-    if (
-      !itemName ||
-      !itemType ||
-      !location ||
-      !description ||
-      !reporterName ||
-      !reporterEmail ||
-      !reporterPhone ||
-      !photo
-    ) {
-      toast.error("Please fill all required fields.");
-      return;
-    }
-
     if (!isSignedIn) {
       toast.error("Login to post the item.");
       return;
     }
-
     try {
       const form = new FormData();
-      form.append("itemName", itemName);
-      form.append("itemType", itemType);
-      form.append("location", location);
-      form.append("description", description);
-      form.append("reporterName", reporterName);
-      form.append("reporterEmail", reporterEmail);
-      form.append("reporterPhone", reporterPhone);
-      form.append("date", date);
-      form.append("status", "pending");
-      form.append("image", photo);
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "photo" && value) {
+          form.append("image", value);
+        } else {
+          form.append(key, value);
+        }
+      });
+      form.append("postedBy", user?.id || "anonymous");
 
-      const res = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/create-lost`,
         form,
         {

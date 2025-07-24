@@ -92,7 +92,7 @@ const LostandFound = () => {
                   className="text-decoration-none text-dark"
                 >
                   <img
-                    src={imageUrls[lostItem._id] || "/default.jpeg"}
+                    src={imageUrls[lostItem._id] || "/lostdemo.jpeg"}
                     alt={lostItem.itemName}
                     className="card-img-top rounded-top-4"
                     style={{ height: "180px", objectFit: "cover" }}

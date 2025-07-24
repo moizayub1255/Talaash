@@ -5,7 +5,6 @@ import Headandfoot from "./components/Headandfoot";
 import { toast } from "react-toastify";
 import "../Styles/Options.css";
 import { useUser } from "@clerk/clerk-react";
- 
 
 const ScholarshipOptions = () => {
   const [formData, setFormData] = useState({
@@ -21,8 +20,7 @@ const ScholarshipOptions = () => {
   });
 
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
-
+  const { isSignedIn, user } = useUser();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,14 +57,18 @@ const ScholarshipOptions = () => {
     }
 
     if (!isSignedIn) {
-    toast.error("Login to post a scholarship.");
-    return;
-  }
+      toast.error("Login to post a scholarship.");
+      return;
+    }
 
     try {
+      const data = {
+        ...formData,
+        postedBy: user?.id || "anonymous",
+      };
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/create-scholarship`,
-        { ...formData }
+        data
       );
 
       toast.success("Scholarship posted!");
@@ -107,7 +109,8 @@ const ScholarshipOptions = () => {
             Discover Scholarships <br /> That Shape Your Future
           </h1>
           <p className="lead mb-4">
-            Explore opportunities to fund your education and achieve your academic goals — locally and globally.
+            Explore opportunities to fund your education and achieve your
+            academic goals — locally and globally.
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
@@ -117,7 +120,9 @@ const ScholarshipOptions = () => {
                   toast.error("Login to Post the Scholarship");
                   return;
                 }
-                const modal = new window.bootstrap.Modal(document.getElementById("scholarshipModal"));
+                const modal = new window.bootstrap.Modal(
+                  document.getElementById("scholarshipModal")
+                );
 
                 modal.show();
               }}
@@ -158,7 +163,8 @@ const ScholarshipOptions = () => {
               </div>
               <div className="modal-body">
                 <p className="text-muted text-center">
-                  <strong>Note:</strong> Once posted, scholarships cannot be deleted.
+                  <strong>Note:</strong> Once posted, scholarships cannot be
+                  deleted.
                 </p>
 
                 <input

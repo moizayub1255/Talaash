@@ -1,3 +1,21 @@
+// ======= DELETE LOST ITEM ===========
+export const deleteLostController = async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.body.userId;
+  const lost = await LostModel.findOne({ _id: id });
+  if (!lost) {
+    return res
+      .status(404)
+      .json({ message: `No Lost Item Found With This ID ${id}` });
+  }
+  if (!userId || userId !== lost.postedBy) {
+    return res
+      .status(403)
+      .json({ message: "You are not authorized to delete this lost item" });
+  }
+  await lost.deleteOne();
+  res.status(200).json({ message: "Success, Lost Item Deleted!" });
+};
 import mongoose from "mongoose";
 import moment from "moment";
 import fs from "fs";
@@ -64,6 +82,7 @@ export const createLostController = async (req, res) => {
             contentType: req.file.mimetype,
           }
         : undefined,
+      postedBy: req.body.postedBy || "anonymous",
     });
 
     await lostItem.save();

@@ -1,9 +1,11 @@
+// DELETE LOST ITEM
 import cors from "cors";
 import express from "express";
 
 import {
   applylostController,
   createLostController,
+  deleteLostController,
   getAllLostController,
   getSingleLostController,
   LostPhotoController,
@@ -12,6 +14,7 @@ import upload from "../utils/multerConfig.js";
 
 const router = express.Router();
 
+router.delete("/delete-lost/:id", deleteLostController);
 // Add multer middleware for image upload
 router.post("/create-lost", upload.single("image"), createLostController);
 // router.post("/create-lost", requireAuth, upload.single("image"), createLostController);

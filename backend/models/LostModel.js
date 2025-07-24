@@ -42,6 +42,9 @@ const LostAndFoundSchema = new mongoose.Schema(
       enum: ["pending", "resolved"],
       default: "pending",
     },
+    postedBy: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

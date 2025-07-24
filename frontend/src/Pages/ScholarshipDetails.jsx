@@ -7,7 +7,7 @@ import { useUser } from "@clerk/clerk-react";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
   const [scholarship, setScholarship] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [applicant, setApplicant] = useState({
@@ -108,13 +108,39 @@ const ScholarshipDetails = () => {
                 </p>
               </div>
               <div className="card-footer bg-white text-end">
+                {/* Delete button only for scholarship poster */}
+                {user && scholarship.postedBy === user.id && (
+                  <button
+                    className="btn btn-danger me-2"
+                    onClick={async () => {
+                      if (
+                        !window.confirm(
+                          "Are you sure you want to delete this scholarship?"
+                        )
+                      )
+                        return;
+                      try {
+                        await axios.delete(
+                          `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/delete-scholarship/${scholarship._id}`,
+                          {
+                            data: { userId: user.id },
+                          }
+                        );
+                        toast.success("Scholarship deleted successfully!");
+                        window.location.href = "/scholarship";
+                      } catch (err) {
+                        toast.error("Failed to delete scholarship");
+                      }
+                    }}
+                  >
+                    Delete Scholarship
+                  </button>
+                )}
                 <button
                   className="btn btn-success my-3"
                   onClick={() => {
                     if (!isSignedIn) {
-                      toast.error(
-                        "Login to apply for this scholarship."
-                      );
+                      toast.error("Login to apply for this scholarship.");
                       return;
                     }
                     setShowModal(true);

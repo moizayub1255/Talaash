@@ -1,13 +1,15 @@
 import express from "express";
+const router = express.Router();
 import {
   applyScholarshipController,
   createScholarshipController,
   getAllScholarshipController,
   getSingleScholarshipController,
+  deleteScholarshipController,
 } from "../controllers/scholarshipController.js";
 
-const router = express.Router();
-
+// DELETE SCHOLARSHIP
+router.delete("/delete-scholarship/:id", deleteScholarshipController);
 //routes
 // CREATE JOB || POST
 router.post("/create-scholarship", createScholarshipController);
@@ -22,4 +24,3 @@ router.get("/get-scholarship", getAllScholarshipController);
 router.get("/scholarship/:id", getSingleScholarshipController);
 
 export default router;
-

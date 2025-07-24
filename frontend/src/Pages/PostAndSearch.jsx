@@ -19,7 +19,7 @@ const PostAndSearch = () => {
 
   const navigate = useNavigate();
   const { getToken } = useAuth();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,6 +54,7 @@ const PostAndSearch = () => {
       const data = {
         ...formData,
         workType: formData.workType || "full-time",
+        createdBy: user?.id || "anonymous",
       };
 
       await axios.post(
@@ -108,18 +109,20 @@ const PostAndSearch = () => {
           </p>
           <div className="d-flex justify-content-center gap-3 flex-wrap">
             <button
-  className="btn btn-success btn-lg px-4 btn-glow"
-  onClick={() => {
-    if (!isSignedIn) {
-      toast.error("Login to Post the Job");
-      return;
-    }
-    const modal = new window.bootstrap.Modal(document.getElementById("postJobModal"));
-    modal.show();
-  }}
->
-  Post A Job
-</button>
+              className="btn btn-success btn-lg px-4 btn-glow"
+              onClick={() => {
+                if (!isSignedIn) {
+                  toast.error("Login to Post the Job");
+                  return;
+                }
+                const modal = new window.bootstrap.Modal(
+                  document.getElementById("postJobModal")
+                );
+                modal.show();
+              }}
+            >
+              Post A Job
+            </button>
 
             <button
               onClick={() => navigate("/jobs")}

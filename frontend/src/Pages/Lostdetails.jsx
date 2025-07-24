@@ -9,7 +9,7 @@ const LostDetails = () => {
   const { id } = useParams();
   const [lost, setLost] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [applicant, setApplicant] = useState({
     name: "",
@@ -34,10 +34,10 @@ const LostDetails = () => {
             const blob = await imgRes.blob();
             setImageUrl(URL.createObjectURL(blob));
           } else {
-            setImageUrl("/default.jpeg");
+            setImageUrl("/lostdemo.jpeg");
           }
         } catch {
-          setImageUrl("/default.jpeg");
+          setImageUrl("/lostdemo.jpeg");
         }
       } catch (error) {
         console.error("Error fetching Lost details:", error);
@@ -126,6 +126,34 @@ Please contact me as soon as possible. Thank you!
                 </p>
               </div>
               <div className="card-footer bg-white text-end">
+                {/* Delete button only for lost item poster */}
+                {user && lost.postedBy === user.id && (
+                  <button
+                    className="btn btn-danger me-2"
+                    onClick={async () => {
+                      if (
+                        !window.confirm(
+                          "Are you sure you want to delete this lost item?"
+                        )
+                      )
+                        return;
+                      try {
+                        await axios.delete(
+                          `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/delete-lost/${lost._id}`,
+                          {
+                            data: { userId: user.id },
+                          }
+                        );
+                        toast.success("Lost item deleted successfully!");
+                        window.location.href = "/lost-and-found";
+                      } catch (err) {
+                        toast.error("Failed to delete lost item");
+                      }
+                    }}
+                  >
+                    Delete Item
+                  </button>
+                )}
                 <button
                   className="btn btn-success my-3"
                   onClick={() => {

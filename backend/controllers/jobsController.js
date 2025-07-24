@@ -160,15 +160,18 @@ export const updateJobController = async (req, res, next) => {
 // ======= DELETE JOBS ===========
 export const deleteJobController = async (req, res, next) => {
   const { id } = req.params;
+  // For demo: get userId from request body (or req.user.userId if using auth)
+  const userId = req.body.userId || (req.user && req.user.userId);
   //find job
   const job = await jobsModel.findOne({ _id: id });
   //validation
   if (!job) {
-    next(`No Job Found With This ID ${id}`);
+    return res.status(404).json({ message: `No Job Found With This ID ${id}` });
   }
-  if (!req.user.userId === job.createdBy.toString()) {
-    next("Your Not Authorize to delete this job");
-    return;
+  if (!userId || userId !== job.createdBy) {
+    return res
+      .status(403)
+      .json({ message: "You are not authorized to delete this job" });
   }
   await job.deleteOne();
   res.status(200).json({ message: "Success, Job Deleted!" });

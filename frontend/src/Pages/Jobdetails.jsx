@@ -109,8 +109,37 @@ const JobDetails = () => {
                   <strong>Posted on:</strong>{" "}
                   {new Date(job.createdAt).toLocaleDateString()}
                 </p>
+                
               </div>
               <div className="card-footer bg-white text-end">
+                {/* Delete button only for job poster */}
+                {user && job.createdBy === user.id && (
+                  <button
+                    className="btn btn-danger me-2"
+                    onClick={async () => {
+                      if (
+                        !window.confirm(
+                          "Are you sure you want to delete this job?"
+                        )
+                      )
+                        return;
+                      try {
+                        await axios.delete(
+                          `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/delete-job/${job._id}`,
+                          {
+                            data: { userId: user.id },
+                          }
+                        );
+                        toast.success("Job deleted successfully!");
+                        window.location.href = "/jobs";
+                      } catch (err) {
+                        toast.error("Failed to delete job");
+                      }
+                    }}
+                  >
+                    Delete Job
+                  </button>
+                )}
                 <button
                   className="btn btn-success my-3"
                   onClick={() => {

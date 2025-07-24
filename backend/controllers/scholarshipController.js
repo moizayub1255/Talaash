@@ -1,4 +1,21 @@
-
+// ======= DELETE SCHOLARSHIP ===========
+export const deleteScholarshipController = async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.body.userId;
+  const scholarship = await ScholarshipModel.findOne({ _id: id });
+  if (!scholarship) {
+    return res
+      .status(404)
+      .json({ message: `No Scholarship Found With This ID ${id}` });
+  }
+  if (!userId || userId !== scholarship.postedBy) {
+    return res
+      .status(403)
+      .json({ message: "You are not authorized to delete this scholarship" });
+  }
+  await scholarship.deleteOne();
+  res.status(200).json({ message: "Success, Scholarship Deleted!" });
+};
 
 import { sendEmail } from "../utils/emailHelper.js";
 import ScholarshipModel from "../models/ScholarshipModel.js";
@@ -14,7 +31,7 @@ export const createScholarshipController = async (req, res, next) => {
       category,
       country,
       postedBy,
-      posterEmail
+      posterEmail,
     } = req.body;
 
     const ScholarshipData = {
@@ -50,10 +67,13 @@ export const applyScholarshipController = async (req, res) => {
     console.log("🚨 No posterEmail for Scholarship:", scholarship._id);
     return res
       .status(400)
-      .json({ message: "Scholarship poster email missing, cannot send application" });
+      .json({
+        message: "Scholarship poster email missing, cannot send application",
+      });
   }
 
-  if (!scholarship) return res.status(404).json({ message: "Scholarship not found" });
+  if (!scholarship)
+    return res.status(404).json({ message: "Scholarship not found" });
 
   const emailText = `
 New Scholarship Application for: ${scholarship.category}
@@ -86,7 +106,6 @@ ${coverLetter}
 
   res.status(200).json({ message: "Application submitted successfully" });
 };
-
 
 export const getAllScholarshipController = async (req, res, next) => {
   const { status, category, search, sort } = req.query;
@@ -127,7 +146,6 @@ export const getAllScholarshipController = async (req, res, next) => {
     numOfPage,
   });
 };
-
 
 export const getSingleScholarshipController = async (req, res) => {
   try {
