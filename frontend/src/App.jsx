@@ -15,6 +15,7 @@ import Lostdetails from "./Pages/Lostdetails";
 import LostOptions from "./Pages/LostOptions";
 import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
+import CVGenerator from "./Pages/CVGenerator";
 import {
   SignIn,
   SignUp,
@@ -57,6 +58,7 @@ const App = () => {
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/job-options" element={<PostAndSearch />} />
         <Route path="/scholarship-options" element={<ScholarshipOptions />} />
+        <Route path="/generate-cv" element={<CVGenerator />} />
         <Route
           path="/scholarship-details/:id"
           element={<ScholarshipDetails />}

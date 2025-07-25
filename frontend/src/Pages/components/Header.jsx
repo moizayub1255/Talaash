@@ -52,8 +52,9 @@ const Header = () => {
               { path: "/jobs", label: "Jobs" },
               { path: "/scholarship", label: "Scholarships" },
               { path: "/lost-and-found", label: "Lost & Found" },
-              { path: "/about", label: "About" },
-              { path: "/contact", label: "Contact" },
+              { path: "/generate-cv", label: "Generate CV" },
+              // { path: "/about", label: "About" },
+              // { path: "/contact", label: "Contact" },
             ].map(({ path, label }) => (
               <li className="nav-item" key={path}>
                 <NavLink to={path} className="nav-link fs-5">
