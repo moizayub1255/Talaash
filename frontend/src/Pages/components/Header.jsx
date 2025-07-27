@@ -52,7 +52,7 @@ const Header = () => {
               { path: "/jobs", label: "Jobs" },
               { path: "/scholarship", label: "Scholarships" },
               { path: "/lost-and-found", label: "Lost & Found" },
-              { path: "/generate-cv", label: "Generate CV" },
+              { path: "/cv-options", label: "Generate CV" },
               // { path: "/about", label: "About" },
               // { path: "/contact", label: "Contact" },
             ].map(({ path, label }) => (

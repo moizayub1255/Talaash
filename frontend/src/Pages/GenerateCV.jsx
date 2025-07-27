@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useUser } from "@clerk/clerk-react";
 
 const CVBuilder = () => {
   const cvRef = useRef();
@@ -55,14 +56,36 @@ const CVBuilder = () => {
     ],
   });
 
-  const handleDownloadPDF = () => {
-    html2canvas(cvRef.current).then((canvas) => {
+  const { user } = useUser();
+
+  const handleDownloadPDF = async () => {
+    if (!user?.id) {
+      alert("You must be logged in to download and save your CV.");
+      return;
+    }
+    html2canvas(cvRef.current).then(async (canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      // Get PDF as base64
+      const pdfBase64 = pdf.output("datauristring");
+      // Send CV data + PDF to backend
+      try {
+        const payload = { ...cvData, pdfBase64, userId: user.id };
+        console.log('Sending CV to backend:', payload);
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/cv`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (error) {
+        console.error("Failed to save CV data:", error);
+      }
       pdf.save("My_CV.pdf");
     });
   };

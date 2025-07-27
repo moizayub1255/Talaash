@@ -14,6 +14,7 @@ import jobsRoutes from "./routes/jobsRoute.js";
 import ScholarshipRoutes from "./routes/ScholarshipRoutes.js";
 import LostRoutes from "./routes/LostRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import cvRoutes from "./routes/cvRoutes.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -42,6 +43,7 @@ app.use("/api/v1/job", jobsRoutes);
 app.use("/api/v1/scholarship", ScholarshipRoutes);
 app.use("/api/v1/lost", LostRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/v1/cv", cvRoutes);
 
 app.use(errroMiddelware);
 

@@ -27,6 +27,8 @@ import {
   ClerkLoaded,
 } from "@clerk/clerk-react";
 import SaveClerkUser from "./Pages/SaveClerkUser";
+import CVOptions from "./Pages/CVOptions";
+import CVBuilder2 from "./Pages/GenerateCV2";
 
 const App = () => {
   return (
@@ -61,6 +63,8 @@ const App = () => {
         <Route path="/job-options" element={<PostAndSearch />} />
         <Route path="/scholarship-options" element={<ScholarshipOptions />} />
         <Route path="/generate-cv" element={<CVBuilder />} />
+        <Route path="/generate-cv2" element={<CVBuilder2 />} />
+        <Route path="/cv-options" element={<CVOptions />} />
         {/* <Route path="/generate-cv" element={<CVGenerator />} /> */}
         <Route
           path="/scholarship-details/:id"

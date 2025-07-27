@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { saveAs } from "file-saver";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
@@ -18,6 +19,44 @@ const JobDetails = () => {
     coverLetter: "",
     cvFile: null,
   });
+
+  // Fetch latest CV and set as default when modal opens
+  const fetchAndSetLatestCV = async (userId) => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/cv/latest?userId=${encodeURIComponent(userId)}`
+      );
+      const { pdfBase64 } = res.data;
+      if (pdfBase64) {
+        // Extract base64 string from data URI
+        const base64 = pdfBase64.split(",")[1];
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+        const file = new File([blob], "My_CV.pdf", { type: "application/pdf" });
+        setApplicant((prev) => ({ ...prev, cvFile: file }));
+        console.log("Auto-filled CV from backend");
+      } else {
+        setApplicant((prev) => ({ ...prev, cvFile: null }));
+        console.log("No CV found for user");
+      }
+    } catch (err) {
+      setApplicant((prev) => ({ ...prev, cvFile: null }));
+      console.log("Error fetching CV", err);
+    }
+  };
+
+  // When modal opens, fetch latest CV if user is signed in
+  React.useEffect(() => {
+    if (showModal && user?.id) {
+      fetchAndSetLatestCV(user.id);
+    }
+    // eslint-disable-next-line
+  }, [showModal]);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -263,8 +302,14 @@ const JobDetails = () => {
                                     cvFile: e.target.files[0],
                                   })
                                 }
-                                required
+                                // Show file name if auto-filled
+                                value={undefined}
                               />
+                              {applicant.cvFile && (
+                                <div className="mt-2 text-success">
+                                  Using your latest CV: {applicant.cvFile.name}
+                                </div>
+                              )}
                             </div>
                           </div>
 
