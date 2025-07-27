@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import "../Styles/Options.css";
 import { useUser } from "@clerk/clerk-react";
 
-const ScholarshipOptions = () => {
+const ScholarshipOptions = ({ onSearchScholarship }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -130,7 +130,11 @@ const ScholarshipOptions = () => {
               Post a Scholarship
             </button>
             <button
-              onClick={() => navigate("/scholarship")}
+              onClick={() => {
+                if (onSearchScholarship) {
+                  onSearchScholarship(); // Smooth scroll to Available Scholarships
+                }
+              }}
               className="btn btn-outline-light btn-lg px-4 btn-glow"
             >
               Search Scholarships

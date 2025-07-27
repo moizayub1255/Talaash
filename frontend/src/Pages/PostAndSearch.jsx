@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import "../Styles/Options.css";
 import { useAuth, useUser } from "@clerk/clerk-react";
 
-const PostAndSearch = () => {
+const PostAndSearch = ({ onSearchJob }) => {
   const [formData, setFormData] = useState({
     company: "",
     position: "",
@@ -115,6 +115,7 @@ const PostAndSearch = () => {
                   toast.error("Login to Post the Job");
                   return;
                 }
+
                 const modal = new window.bootstrap.Modal(
                   document.getElementById("postJobModal")
                 );
@@ -124,9 +125,14 @@ const PostAndSearch = () => {
               Post A Job
             </button>
 
+            {/* ✅ Search A Job Button */}
             <button
-              onClick={() => navigate("/jobs")}
               className="btn btn-outline-light btn-lg px-4 btn-glow"
+              onClick={() => {
+                if (onSearchJob) {
+                  onSearchJob(); 
+                }
+              }}
             >
               Search A Job
             </button>

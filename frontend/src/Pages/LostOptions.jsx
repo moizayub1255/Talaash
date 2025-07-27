@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "../Styles/Options.css";
 import { useUser } from "@clerk/clerk-react";
 
-const LostOptions = () => {
+const LostOptions = ({ onSearchLost }) => {
   const [formData, setFormData] = useState({
     itemName: "",
     itemType: "",
@@ -170,7 +170,11 @@ const LostOptions = () => {
             </button>
 
             <button
-              onClick={() => navigate("/lost-and-found")}
+              onClick={() => {
+                if (typeof onSearchLost === "function") {
+                  onSearchLost(); // 📜 Scroll to Available Items
+                }
+              }}
               className="btn btn-outline-light btn-lg px-4 btn-glow"
             >
               Search Lost Items
