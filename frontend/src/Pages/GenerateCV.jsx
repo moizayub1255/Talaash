@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useUser } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
 
 const CVBuilder = () => {
   const cvRef = useRef();
@@ -60,7 +61,7 @@ const CVBuilder = () => {
 
   const handleDownloadPDF = async () => {
     if (!user?.id) {
-      alert("You must be logged in to download and save your CV.");
+      toast.error("You must be logged in to download and save your CV.");
       return;
     }
     html2canvas(cvRef.current).then(async (canvas) => {
@@ -76,17 +77,25 @@ const CVBuilder = () => {
       try {
         const payload = { ...cvData, pdfBase64, userId: user.id };
         console.log('Sending CV to backend:', payload);
-        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/cv`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/cv`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
         });
+        if (!response.ok) {
+          const errorData = await response.json();
+          toast.error("Failed to save CV: " + (errorData.error || response.statusText));
+          return;
+        }
+        toast.success("CV saved successfully!");
+        // Only download if save succeeded
+        pdf.save("My_CV.pdf");
       } catch (error) {
         console.error("Failed to save CV data:", error);
+        toast.error("Failed to save CV data. Please try again.");
       }
-      pdf.save("My_CV.pdf");
     });
   };
 

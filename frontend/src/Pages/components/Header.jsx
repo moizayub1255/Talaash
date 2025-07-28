@@ -24,10 +24,11 @@ const Header = () => {
           to="/"
         >
           <img
-            src="/logo1.gif"
+            src="/GREEN (1).gif"
             alt="Logo"
             style={{
               height: "50px",
+              width: "80px",
             }}
           />
           {/* <span className="d-none d-sm-block fw-bold fs-5 text-success">TALAASH</span> */}
