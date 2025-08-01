@@ -18,6 +18,9 @@ const LostDetails = () => {
     coverLetter: "",
   });
 
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+
   useEffect(() => {
     const fetchLost = async () => {
       try {
@@ -86,6 +89,9 @@ Please contact me as soon as possible. Thank you!
     )}`;
 
     window.location.href = whatsappLink;
+
+    // Show confirmation checkbox after redirect
+    setShowModal(false);
   };
 
   if (!lost) return <p className="text-center mt-5">Loading...</p>;
@@ -268,6 +274,39 @@ Please contact me as soon as possible. Thank you!
                         </form>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {showConfirm && !confirmed && (
+                  <div className="mt-3">
+                    <label className="form-check-label">
+                      <input
+                        type="checkbox"
+                        className="form-check-input me-2"
+                        checked={confirmed}
+                        onChange={(e) => setConfirmed(e.target.checked)}
+                      />
+                      Confirm you have got your item?
+                    </label>
+                    <button
+                      className="btn btn-primary ms-3"
+                      onClick={async () => {
+                        try {
+                          await axios.put(
+                            `${import.meta.env.VITE_BACKEND_URL}/api/v1/lost/update-status/${lost._id}`,
+                            { status: "resolved" }
+                          );
+                          toast.success("Thank you for confirming!");
+                          setConfirmed(true);
+                          setShowConfirm(false);
+                        } catch (error) {
+                          toast.error("Failed to update status");
+                        }
+                      }}
+                      disabled={!confirmed}
+                    >
+                      Submit
+                    </button>
                   </div>
                 )}
               </div>

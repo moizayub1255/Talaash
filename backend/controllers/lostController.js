@@ -201,3 +201,24 @@ export const getSingleLostController = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+// ======= UPDATE LOST ITEM STATUS ===========
+export const updateLostStatusController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const lost = await LostModel.findById(id);
+    if (!lost) {
+      return res.status(404).json({ message: "Lost item not found" });
+    }
+
+    lost.status = status || lost.status;
+    await lost.save();
+
+    res.status(200).json({ message: "Lost item status updated", lost });
+  } catch (error) {
+    console.error("Error updating lost item status:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

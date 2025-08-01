@@ -120,11 +120,11 @@ const LostandFound = () => {
                   <img
                     src={imageUrls[lostItem._id] || "/lostdemo.jpeg"}
                     alt={lostItem.itemName}
-                    className="card-img-top rounded-top-4"
+                    className="card-img-top rounded-top-4 "
                     style={{ height: "180px", objectFit: "cover" }}
                   />
                   <div className="card-body">
-                    <h5 className="card-title">{lostItem.itemName}</h5>
+                    <h5 className="card-title">Item Name: {lostItem.itemName}</h5>
                     <p className="card-text mb-1">
                       <strong>Type:</strong> {lostItem.itemType}
                     </p>
@@ -147,14 +147,15 @@ const LostandFound = () => {
                 </Link>
 
                 <div className="card-footer bg-white border-0 text-end">
-                  <button
-                    className="btn btn-success rounded-pill px-4 fw-semibold"
-                    onClick={() => {
-                      navigate(`/lost-and-found-details/${lostItem._id}`);
-                    }}
-                  >
-                    Claim Item
-                  </button>
+                <button
+                  className="btn btn-success rounded px-4 fw-semibold w-100 h-100"
+                  disabled={lostItem.status === "resolved"}
+                  onClick={() => {
+                    navigate(`/lost-and-found-details/${lostItem._id}`);
+                  }}
+                >
+                  {lostItem.status === "resolved" ? "Item Found" : "Claim Item"}
+                </button>
                 </div>
               </div>
             </div>
