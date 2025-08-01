@@ -137,6 +137,7 @@ const Scholarship = () => {
                 <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
                   <button
                     className="btn btn-success rounded-pill px-4 fw-semibold"
+                    disabled={new Date(sch.deadline) < new Date()}
                     onClick={() => {
                       navigate(`/scholarship-details/${sch._id}`);
                     }}

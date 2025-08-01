@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Headandfoot from "./components/Headandfoot";
@@ -15,11 +15,40 @@ const PostAndSearch = ({ onSearchJob }) => {
     salary: "",
     workType: "",
     posterEmail: "",
+    deadline: "",
   });
+
+  const [latestDeadline, setLatestDeadline] = useState(null);
 
   const navigate = useNavigate();
   const { getToken } = useAuth();
   const { isSignedIn, user } = useUser();
+
+  useEffect(() => {
+    // Fetch latest job deadline to validate new postings
+    const fetchLatestDeadline = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job`
+        );
+        const jobs = res.data?.jobs || [];
+        if (jobs.length > 0) {
+          // Find the latest deadline among jobs
+          const deadlines = jobs
+            .map((job) => job.deadline)
+            .filter(Boolean)
+            .map((d) => new Date(d));
+          if (deadlines.length > 0) {
+            const maxDeadline = new Date(Math.max(...deadlines));
+            setLatestDeadline(maxDeadline);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching latest job deadline", err);
+      }
+    };
+    fetchLatestDeadline();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,9 +71,26 @@ const PostAndSearch = ({ onSearchJob }) => {
       !formData.description ||
       !formData.workLocation ||
       !formData.salary ||
-      !formData.workType
+      !formData.workType ||
+      !formData.deadline
     ) {
       toast.error("Please fill all required fields.");
+      return;
+    }
+
+    // Validate deadline is not before today
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(formData.deadline) < today) {
+      toast.error("Deadline cannot be in the past.");
+      return;
+    }
+
+    // Validate deadline is not before latestDeadline
+    if (latestDeadline && new Date(formData.deadline) < latestDeadline) {
+      toast.error(
+        `Deadline cannot be before the latest posted job deadline: ${latestDeadline.toLocaleDateString()}`
+      );
       return;
     }
 
@@ -78,6 +124,7 @@ const PostAndSearch = ({ onSearchJob }) => {
         salary: "",
         workType: "",
         posterEmail: "",
+        deadline: "",
       });
 
       // Close modal
@@ -130,7 +177,7 @@ const PostAndSearch = ({ onSearchJob }) => {
               className="btn btn-outline-light btn-lg px-4 btn-glow"
               onClick={() => {
                 if (onSearchJob) {
-                  onSearchJob(); 
+                  onSearchJob();
                 }
               }}
             >
@@ -219,6 +266,14 @@ const PostAndSearch = ({ onSearchJob }) => {
                   name="posterEmail"
                   placeholder="Your Email"
                   value={formData.posterEmail}
+                  onChange={handleChange}
+                  className="form-control mb-2"
+                  required
+                />
+                <input
+                  type="date"
+                  name="deadline"
+                  value={formData.deadline}
                   onChange={handleChange}
                   className="form-control mb-2"
                   required

@@ -138,6 +138,7 @@ const ScholarshipDetails = () => {
                 )}
                 <button
                   className="btn btn-success my-3"
+                  disabled={new Date(scholarship.deadline) < new Date()}
                   onClick={() => {
                     if (!isSignedIn) {
                       toast.error("Login to apply for this scholarship.");

@@ -33,6 +33,10 @@ const jobSchema = new mongoose.Schema(
       default: "Lahore",
       required: [true, "Work location is required"],
     },
+    deadline: {
+      type: Date,
+      required: [true, "Deadline is required"],
+    },
     createdBy: {
       type: String,
     },

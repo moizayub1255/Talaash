@@ -124,10 +124,16 @@ export const getAllScholarshipController = async (req, res, next) => {
 
   let queryResult = ScholarshipModel.find(queryObject);
 
-  if (sort === "latest") queryResult = queryResult.sort("-createdAt");
-  if (sort === "oldest") queryResult = queryResult.sort("createdAt");
-  if (sort === "a-z") queryResult = queryResult.sort("position");
-  if (sort === "z-a") queryResult = queryResult.sort("-position");
+  // Default sort by latest created
+  if (!sort || sort === "latest") {
+    queryResult = queryResult.sort("-createdAt");
+  } else if (sort === "oldest") {
+    queryResult = queryResult.sort("createdAt");
+  } else if (sort === "a-z") {
+    queryResult = queryResult.sort("position");
+  } else if (sort === "z-a") {
+    queryResult = queryResult.sort("-position");
+  }
 
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;

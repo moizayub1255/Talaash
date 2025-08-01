@@ -16,6 +16,7 @@ export const createJobController = async (req, res, next) => {
       posterEmail,
       workLocation,
       createdBy,
+      deadline,
       // phone,
     } = req.body;
 
@@ -28,6 +29,7 @@ export const createJobController = async (req, res, next) => {
       workType: workType || "full-time",
       posterEmail: posterEmail,
       workLocation,
+      deadline,
       createdBy: createdBy || "anonymous",
       // phone,
     };

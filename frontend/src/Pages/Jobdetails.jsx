@@ -181,6 +181,7 @@ const JobDetails = () => {
                 )}
                 <button
                   className="btn btn-success my-3"
+                  disabled={job.deadline && new Date(job.deadline) < new Date()}
                   onClick={() => {
                     if (!isSignedIn) {
                       toast.error("Login to apply for jobs.");

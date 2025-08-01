@@ -61,6 +61,34 @@ const ScholarshipOptions = ({ onSearchScholarship }) => {
       return;
     }
 
+    // Fetch latest scholarship deadline to validate new postings
+    let latestDeadline = null;
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/scholarship/get-scholarship`
+      );
+      const scholarships = res.data?.scholarships || [];
+      if (scholarships.length > 0) {
+        const deadlines = scholarships
+          .map((sch) => sch.deadline)
+          .filter(Boolean)
+          .map((d) => new Date(d));
+        if (deadlines.length > 0) {
+          latestDeadline = new Date(Math.max(...deadlines));
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching latest scholarship deadline", err);
+    }
+
+    // Validate deadline is not before latestDeadline
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(deadline) < today) {
+      toast.error("Deadline cannot be past");
+      return;
+    }
+
     try {
       const data = {
         ...formData,

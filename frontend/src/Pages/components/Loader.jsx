@@ -3,7 +3,7 @@ import React from "react";
 const Loader = () => {
   return (
     <div style={styles.overlay}>
-      <img src="/logo.gif" alt="Loading..." style={styles.gif} />
+      <img src="/GREEN (1).gif" alt="Loading..." style={styles.gif} />
     </div>
   );
 };

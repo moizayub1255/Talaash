@@ -95,8 +95,17 @@ const Footer = () => {
               +92 336 6190190
             </p>
             <p>
+              <FaPhoneAlt className="me-2" />
+              +92 317 0046234
+            </p>
+
+            <p>
               <FaEnvelope className="me-2" />
               moizayub@gmail.com
+            </p>
+            <p>
+              <FaEnvelope className="me-2" />
+              muneebtariq7777@gmail.com
             </p>
             <div className="d-flex gap-3 mt-3">
               <a href="#">
@@ -140,7 +149,7 @@ const Footer = () => {
                 talaash
               </Link>
               , All Right Reserved. Developed and Designed By{" "}
-              <span className="text-success">Moiz and co.</span>
+              <span className="text-success">Moiz,Muneeb and co.</span>
             </p>
           </div>
           <div className="col-md-4 d-flex justify-content-md-end gap-4">

@@ -75,30 +75,30 @@ const LostandFound = () => {
       <LostOptions onSearchLost={handleScrollToLosts} />
 
       <div className="container my-5">
-  <h2 className="text-center mb-4">How it Works</h2>
-  <div className="row align-items-center">
-    <div className="col-md-6 mb-4 mb-md-0">
-      <img
-        src="/about.jpg"
-        alt="How it Works"
-        className="img-fluid rounded shadow"
-      />
-    </div>
-    <div className="col-md-6">
-      <p className="fs-5">
-        Before listing any Lost or Found Item, our team verifies all the
-        details with the concerned institution or organization. This ensures
-        authenticity, transparency, and eliminates the risk of scams or fake
-        programs.
-      </p>
-      <p className="fs-6 text-muted">
-        We prioritize student safety and aim to provide only the most credible
-        and accessible scholarships available nationwide and internationally.
-      </p>
-    </div>
-  </div>
-</div>
-
+        <h2 className="text-center mb-4">How it Works</h2>
+        <div className="row align-items-center">
+          <div className="col-md-6 mb-4 mb-md-0">
+            <img
+              src="/about.jpg"
+              alt="How it Works"
+              className="img-fluid rounded shadow"
+            />
+          </div>
+          <div className="col-md-6">
+            <p className="fs-5">
+              Before listing any Lost or Found Item, our team verifies all the
+              details with the concerned institution or organization. This
+              ensures authenticity, transparency, and eliminates the risk of
+              scams or fake programs.
+            </p>
+            <p className="fs-6 text-muted">
+              We prioritize student safety and aim to provide only the most
+              credible and accessible scholarships available nationwide and
+              internationally.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div ref={lostSectionRef} className="available-losts py-5 px-3">
         <div className="text-center mb-4">

@@ -26,7 +26,7 @@ const Jobs = () => {
     const getJobs = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job`
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/job/get-job?sort=latest`
         );
         setJobs(res.data?.jobs || []);
       } catch (error) {
@@ -128,8 +128,8 @@ const Jobs = () => {
                         <FaMoneyBill className="me-1" /> {job.salary}
                       </span>
                       <span>
-                        <FaCalendarAlt className="me-1" /> Date Line: 01 Jan,
-                        2045
+                        <FaCalendarAlt className="me-1" /> Deadline:{" "}
+                        {job.deadline}
                       </span>
                     </div>
                   </div>
@@ -139,6 +139,9 @@ const Jobs = () => {
                 <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
                   <button
                     className="btn btn-success rounded-pill px-4 fw-semibold"
+                    disabled={
+                      job.deadline && new Date(job.deadline) < new Date()
+                    }
                     onClick={() => {
                       navigate(`/job-details/${job._id}`);
                     }}
