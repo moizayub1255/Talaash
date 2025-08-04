@@ -41,7 +41,7 @@ const LostOptions = ({ onSearchLost }) => {
         name: "Product 1",
         image: {
           data: base64,
-          contentType: file.type, // e.g., 'image/png'
+          contentType: file.type, 
         },
       }),
     });
@@ -207,9 +207,9 @@ const LostOptions = ({ onSearchLost }) => {
                 ></button>
               </div>
               <div className="modal-body">
-                <p className="text-muted text-center">
+                {/* <p className="text-muted text-center">
                   <strong>Note:</strong> Once posted, items cannot be deleted.
-                </p>
+                </p> */}
 
                 <input
                   type="text"

@@ -303,14 +303,13 @@ const JobDetails = () => {
                                     cvFile: e.target.files[0],
                                   })
                                 }
-                                // Show file name if auto-filled
                                 value={undefined}
                               />
-                              {applicant.cvFile && (
+                              {/* {applicant.cvFile && (
                                 <div className="mt-2 text-success">
                                   Using your latest CV: {applicant.cvFile.name}
                                 </div>
-                              )}
+                              )} */}
                             </div>
                           </div>
 

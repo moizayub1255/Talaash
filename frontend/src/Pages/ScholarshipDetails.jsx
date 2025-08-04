@@ -13,6 +13,7 @@ const ScholarshipDetails = () => {
   const [applicant, setApplicant] = useState({
     name: "",
     email: "",
+    
     phone: "",
     coverLetter: "",
     cvFile: null,

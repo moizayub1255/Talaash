@@ -194,10 +194,10 @@ const ScholarshipOptions = ({ onSearchScholarship }) => {
                 ></button>
               </div>
               <div className="modal-body">
-                <p className="text-muted text-center">
+                {/* <p className="text-muted text-center">
                   <strong>Note:</strong> Once posted, scholarships cannot be
                   deleted.
-                </p>
+                </p> */}
 
                 <input
                   type="text"
