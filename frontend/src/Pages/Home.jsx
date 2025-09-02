@@ -178,8 +178,8 @@ const Home = () => {
       {/* Team or Features Images Section */}
       <div className="container py-5">
         <div className="text-center mb-5">
-          <h2 className="fw-bold">Meet the Team</h2>
-          <p className="text-muted">Creative minds powering Talaash</p>
+          <h2 className="fw-bold">The Mind Behind TALAASH</h2>
+          <p className="text-muted">Creative mind powering Talaash</p>
         </div>
         <div className="row justify-content-center text-center">
           {/* Team Member 1 */}
