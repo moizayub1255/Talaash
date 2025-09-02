@@ -219,7 +219,7 @@ const Home = () => {
           </div>
 
           {/* Team Member 2 */}
-          <div className="col-md-4 mb-4">
+          {/* <div className="col-md-4 mb-4">
             <div className="card border-0 h-100 shadow">
               <div
                 className="mx-auto mt-4"
@@ -252,10 +252,10 @@ const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Team Member 3 */}
-          <div className="col-md-4 mb-4">
+          {/* <div className="col-md-4 mb-4">
             <div className="card border-0 h-100 shadow">
               <div
                 className="mx-auto mt-4"
@@ -288,7 +288,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </Headandfoot>

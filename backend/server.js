@@ -27,10 +27,12 @@ const __dirname = dirname(__filename);
 connectDB();
 
 app.use(cors({
-  origin: 'http://localhost:5173', // ya jo bhi frontend ka origin ho
+  origin: [
+    'http://localhost:5173',
+    'https://talaash-ucp.vercel.app'
+  ],
   credentials: true,
 }));
-app.options("*", cors());
 
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ limit: "25mb", extended: true }));
@@ -48,8 +50,8 @@ app.use("/api/v1/cv", cvRoutes);
 app.use(errroMiddelware);
 
 //console port
-app.listen(process.env.PORT || 5050, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
-});
+// app.listen(process.env.PORT || 5050, () => {
+//   console.log(`Server is running on port ${process.env.PORT}`);
+// });
 
 export default app;
