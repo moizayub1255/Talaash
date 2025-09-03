@@ -92,21 +92,14 @@ const Footer = () => {
             </p>
             <p>
               <FaPhoneAlt className="me-2" />
-              +92 336 6190190
-            </p>
-            <p>
-              <FaPhoneAlt className="me-2" />
-              +92 317 0046234
+              +92 305 8666266
             </p>
 
             <p>
               <FaEnvelope className="me-2" />
-              moizayub@gmail.com
+              moizayub402@gmail.com
             </p>
-            <p>
-              <FaEnvelope className="me-2" />
-              muneebtariq7777@gmail.com
-            </p>
+
             <div className="d-flex gap-3 mt-3">
               <a href="#">
                 <FaTwitter className="text-white" />
