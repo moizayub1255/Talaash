@@ -142,7 +142,7 @@ const Footer = () => {
                 talaash
               </Link>
               , All Right Reserved. Developed and Designed By{" "}
-              <span className="text-success">Moiz,Muneeb and co.</span>
+              <span className="text-success">Moiz and co.</span>
             </p>
           </div>
           <div className="col-md-4 d-flex justify-content-md-end gap-4">
